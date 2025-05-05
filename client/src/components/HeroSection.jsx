@@ -1,9 +1,10 @@
 import React from "react";
-import heroImage from "../assets/hero.png"; // Ensure this image is in the assets folder
+import heroImage from "../assets/hero.png"; // Make sure this image is inside src/assets/
 
 const HeroSection = () => {
   return (
-    <section className="flex flex-col md:flex-row items-center p-12">
+    <section className="flex flex-col md:flex-row items-center px-6 py-12 bg-gray-100">
+      {/* Left Side: Text */}
       <div className="md:w-1/2">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Discover Your Perfect Career Path with AI
@@ -15,8 +16,10 @@ const HeroSection = () => {
           Get Started
         </button>
       </div>
+
+      {/* Right Side: Image */}
       <div className="md:w-1/2">
-        <img src={heroImage} alt="AI Illustration" className="w-full h-auto" />
+        <img src={heroImage} alt="AI Career Guidance" className="w-full h-auto rounded-md shadow-lg" />
       </div>
     </section>
   );

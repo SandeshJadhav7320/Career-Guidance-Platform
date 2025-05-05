@@ -1,27 +1,35 @@
 import React from "react";
-import { FaBullseye, FaBriefcase, FaBook, FaHandshake } from "react-icons/fa";
-
-const features = [
-  { icon: <FaBullseye />, title: "Career Assessment", description: "Take the smart career assessment." },
-  { icon: <FaBriefcase />, title: "Job Matching", description: "Find your ideal job opportunities." },
-  { icon: <FaBook />, title: "Learning Path", description: "Guide through professional development." },
-  { icon: <FaHandshake />, title: "Mentorship Support", description: "Connect with experienced mentors." }
-];
 
 const Features = () => {
   return (
-    <section className="bg-gray-50 py-12 px-6 md:px-20">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-        {features.map((feature, index) => (
-          <div key={index} className="p-6 bg-white shadow-md rounded-md">
-            <div className="text-3xl text-blue-600">{feature.icon}</div>
-            <h3 className="font-bold text-lg mt-2">{feature.title}</h3>
-            <p className="text-sm text-gray-600">{feature.description}</p>
+    <section className="py-12 bg-white">
+      <div className="max-w-screen-lg mx-auto text-center">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6">Why Choose CareerGuide AI?</h2>
+        <p className="text-gray-600 mb-8">Get personalized career insights based on AI-powered assessments.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Feature 1 */}
+          <div className="p-6 bg-gray-100 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold text-blue-600 mb-2">Smart Career Assessment</h3>
+            <p className="text-gray-600">AI analyzes your skills and interests to suggest ideal career paths.</p>
           </div>
-        ))}
+
+          {/* Feature 2 */}
+          <div className="p-6 bg-gray-100 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold text-blue-600 mb-2">Job Recommendations</h3>
+            <p className="text-gray-600">Find job opportunities that match your strengths and ambitions.</p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="p-6 bg-gray-100 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold text-blue-600 mb-2">Expert Mentorship</h3>
+            <p className="text-gray-600">Connect with mentors who guide your career growth.</p>
+          </div>
+        </div>
       </div>
     </section>
   );
 };
 
 export default Features;
+;
