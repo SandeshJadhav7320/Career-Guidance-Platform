@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Features from "../components/Features";
 import HowItWorks from "../components/HowItWorks";
 import Footer from "../components/Footer";
+import Contact from "../components/Contact";
 
 function Home() {
   return (
@@ -11,6 +12,7 @@ function Home() {
       <HeroSection />
       <Features />
       <HowItWorks />
+      <Contact />
       <Footer />
       
     </div>
