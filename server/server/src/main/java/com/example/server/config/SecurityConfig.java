@@ -26,17 +26,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public WebMvcConfigurer corsConfigurer() { // ✅ Define CORS inside the same file
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000") // ✅ Ensure correct frontend URL
+                        .allowedOrigins("http://localhost:5173") // ✅ Allow frontend requests
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowedHeaders("*")
-                        .allowCredentials(true); // ✅ Allow credentials
+                        .allowedHeaders("*"); // ✅ Allow all headers
             }
         };
     }
-
 }
