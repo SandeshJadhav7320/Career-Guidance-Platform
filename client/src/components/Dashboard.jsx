@@ -1,11 +1,23 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Dashboard_Navbar from "../Dashboard_Components/Dashboard_Navbar";
 
-const Dashboard = () =>{
+const Dashboard = () => {
+
+    const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user-info");
+    if (!user) {
+      navigate("/"); // ✅ Redirect unauthorized users to Homepage
+    }
+  }, [navigate]);
     return (
-
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <h1 className="text-2xl font-bold text-gray-700">Dashboard</h1>
-    </div>
+        <>
+        <Dashboard_Navbar/>
+        </>
     );
 };
 
