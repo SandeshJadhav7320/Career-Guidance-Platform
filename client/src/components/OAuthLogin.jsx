@@ -1,34 +1,48 @@
 import React, { useEffect } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 import { googleAuth } from "../api";
 
 const OAuthLogin = () => {
   const login = useGoogleLogin({
-    onSuccess: async (credentialResponse) => {
-      console.log("OAuth Success:", credentialResponse);
+    onSuccess: async (tokenResponse) => {
+      try {
+        const accessToken = tokenResponse.access_token;
+        console.log("✅ OAuth Success:", tokenResponse);
 
-      const decodedUser = jwtDecode(credentialResponse.access_token);
-      console.log("Decoded User:", decodedUser);
+        // Fetch user profile from Google API using access token
+        const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        const profile = await res.json();
+        console.log("👤 Google Profile:", profile);
 
-      const userData = {
-        googleId: decodedUser.sub,
-        email: decodedUser.email,
-        name: decodedUser.name,
-        image: decodedUser.picture,
-      };
+        // Prepare user data to send to backend
+        const userData = {
+          googleId: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          image: profile.picture,
+        };
 
-      console.log("Sending Data to Backend:", userData);
-      await googleAuth(userData);
+        // Send user data to backend
+        const backendUser = await googleAuth(userData);
+        console.log("📡 Backend Response:", backendUser);
 
-      localStorage.setItem("user-info", JSON.stringify(userData));
-      window.location.href = "/dashboard"; // Redirect after login
+        // Store backend response (user data) in localStorage
+        localStorage.setItem("user-info", JSON.stringify(backendUser));
+        console.log("💾 Stored in localStorage:", backendUser);
+
+        // Redirect to dashboard
+        window.location.href = "/dashboard";
+      } catch (error) {
+        console.error("❌ Login or backend communication failed:", error);
+      }
     },
-    onError: () => console.error("Login Failed"),
+    onError: () => console.error("❌ Google login failed"),
   });
 
   useEffect(() => {
-    login(); // ✅ Auto-triggers Google login when the page loads
+    login(); // Trigger Google login on component mount
   }, []);
 
   return (

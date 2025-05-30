@@ -1,24 +1,28 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Dashboard_Navbar from "../Dashboard_Components/Dashboard_Navbar";
+import React, { useState, useEffect } from "react";
 
 const Dashboard = () => {
-
-    const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const user = localStorage.getItem("user-info");
-    if (!user) {
-      navigate("/"); // ✅ Redirect unauthorized users to Homepage
+    const storedUser = localStorage.getItem("user-info");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Failed to parse user info from localStorage:", error);
+      }
     }
-  }, [navigate]);
-    return (
-        <>
-        <Dashboard_Navbar/>
-        </>
-    );
+  }, []);
+
+  if (!user) {
+    return <div>Loading user information...</div>;
+  }
+
+  return (
+    <div className="dashboard">
+      <h1>Welcome, {user.name}!</h1>
+    </div>
+  );
 };
 
 export default Dashboard;

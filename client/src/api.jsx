@@ -1,12 +1,9 @@
-export const googleAuth = async (accessToken) => {
+export const googleAuth = async (userData) => {
   try {
     const response = await fetch("http://localhost:8080/api/auth/google-login", {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}` // ✅ Send the token properly
-      },
-      body: JSON.stringify({ token: accessToken }) // ✅ Ensure correct format
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData), // Send full user info object
     });
 
     if (!response.ok) throw new Error("Server Error");
