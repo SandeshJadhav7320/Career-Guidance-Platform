@@ -5,7 +5,7 @@ const Dashboard_Navbar = () => {
     return (
         <>
         
-        <nav className="flex flex-wrap justify-between items-center px-6 py-4 bg-white ">
+        <nav className="flex flex-wrap justify-between items-center px-6 py-4 bg-gray-100 ">
                 {/* Brand Logo */}
                 <div className="text-2xl font-bold text-blue-600">
                     Career<span className="text-black">Guide</span> AI
