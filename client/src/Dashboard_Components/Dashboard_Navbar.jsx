@@ -18,7 +18,7 @@ const Dashboard_Navbar = () => {
                         Home  🏠
                     </Link>
 
-                    <Link to="#" className="text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-300">
+                    <Link to="/CarrerSelection" className="text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-300">
                         Take Assessment 🚀
                     </Link>
 

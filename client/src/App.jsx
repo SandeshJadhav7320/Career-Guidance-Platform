@@ -5,6 +5,7 @@ import LandingPage from "./components/LandingPage";
 import OAuthLogin from "./components/OAuthLogin";
 import Dashboard from "./components/Dashboard";
 import Profile from "./Dashboard_Components/Profile";
+import CarrerSelection from './Dashboard_Components/CarrerSelection';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/oauth-login" element={<OAuthLogin />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profilepage" element={<Profile />} />
+          <Route path="/CarrerSelection" element={<CarrerSelection />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
