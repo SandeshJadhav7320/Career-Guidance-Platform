@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaTractor, FaTools, FaLandmark, FaUniversity, FaBuilding } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Dashboard_Navbar from "./Dashboard_Navbar";
 
 const CareerSelection = () => {
   const navigate = useNavigate();
@@ -13,15 +14,18 @@ const CareerSelection = () => {
   }, []);
 
   const careerOptions = [
-    { title: "Agriculture", icon: <FaTractor />, path: "/assessment/agriculture" },
+    { title: "Agriculture", icon: <FaTractor />, path: "/agriculture" },
     { title: "Technical Jobs", icon: <FaTools />, path: "/assessment/technical" },
     { title: "Government Jobs", icon: <FaLandmark />, path: "/assessment/government" },
     { title: "Banking & Finance", icon: <FaUniversity />, path: "/assessment/banking" },
-    { title: "Administrative Services", icon: <FaBuilding />, path: "/assessment/admin" },
-    { title: "General Knowledge", icon: <FaBuilding />, path: "/assessment/admin" },
+    { title: "Administrative Services", icon: <FaBuilding />, path: "/assessment/administrative" },
+    { title: "General Knowledge", icon: <FaBuilding />, path: "/assessment/generalknowlwdge" },
   ];
 
   return (
+
+    <>
+    <Dashboard_Navbar></Dashboard_Navbar>
     <div className={`min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 transition-opacity duration-1000 ${fadeIn ? "opacity-100" : "opacity-0"}`}>
       <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Select Your Career Path</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-6xl">
@@ -38,6 +42,8 @@ const CareerSelection = () => {
         ))}
       </div>
     </div>
+    </>
+    
   );
 };
 
