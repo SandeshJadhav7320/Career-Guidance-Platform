@@ -19,8 +19,81 @@ const agricultureQuestions = [
     options: ["Crop cultivation and soil health", "Agriculture technology (AI, automation)", "Business and agricultural trading", "Organic farming and sustainability"],
     answer: 0,
     explanation: "Your interest aligns with careers like Farm Manager, Precision Agriculture Engineer, Agribusiness Expert, or Organic Farming Specialist.",
+  },
+  {
+    question: "How do you feel about working with technology in agriculture?",
+    options: ["I enjoy using advanced tools and machinery", "I prefer traditional farming methods", "I like analyzing data for decision-making", "I’m interested in developing new technologies"],
+    answer: 0,
+    explanation: "This helps determine if you're suited for roles in precision agriculture, agritech development, or traditional farming.",
+  },
+  {
+    question: "What type of work environment do you prefer?",
+    options: ["Outdoors in the field", "In a lab or research facility", "In an office managing operations", "A mix of outdoor and indoor work"],
+    answer: 0,
+    explanation: "Your work environment preference can guide you toward careers like farm management, agricultural research, or agribusiness.",
+  },
+  {
+    question: "How important is sustainability to you in agriculture?",
+    options: ["Very important, I want to focus on organic farming", "Somewhat important, I prefer balancing profit and sustainability", "Not very important, I focus on maximizing yields", "I’m neutral about sustainability"],
+    answer: 0,
+    explanation: "This question helps identify if you're inclined toward organic farming, agribusiness, or high-yield farming techniques.",
+  },
+  {
+    question: "Do you enjoy working with animals?",
+    options: ["Yes, I love working with livestock", "I prefer working with crops", "I’m interested in animal research", "I’m not comfortable working with animals"],
+    answer: 0,
+    explanation: "This helps determine if you're suited for careers in animal husbandry, veterinary science, or crop-focused roles.",
+  },
+  {
+    question: "How do you approach problem-solving in agriculture?",
+    options: ["I prefer hands-on experimentation", "I rely on data and analysis", "I consult with experts and peers", "I use innovative and creative solutions"],
+    answer: 0,
+    explanation: "Your problem-solving approach can guide you toward roles in research, agribusiness, or innovation-focused careers.",
+  },
+  {
+    question: "What motivates you the most in your career?",
+    options: ["Making a positive impact on the environment", "Achieving financial success", "Solving complex challenges", "Helping communities through agriculture"],
+    answer: 0,
+    explanation: "Your motivation can help identify if you're suited for sustainability, agribusiness, research, or community-focused roles.",
+  },
+  {
+    question: "How do you feel about managing people and resources?",
+    options: ["I enjoy leading teams and managing operations", "I prefer working independently", "I like collaborating with others but not managing", "I’m not interested in management roles"],
+    answer: 0,
+    explanation: "This helps determine if you're suited for leadership roles in farm management or agribusiness.",
+  },
+  {
+    question: "What is your preferred scale of work?",
+    options: ["Small-scale, like organic farming", "Medium-scale, like managing a farm", "Large-scale, like agribusiness operations", "I’m open to any scale of work"],
+    answer: 0,
+    explanation: "Your preference for scale can guide you toward careers in organic farming, farm management, or agribusiness.",
+  },
+  {
+    question: "How do you feel about learning new skills in agriculture?",
+    options: ["I’m eager to learn and adapt", "I prefer sticking to what I know", "I enjoy learning but only when necessary", "I’m not very interested in learning new skills"],
+    answer: 0,
+    explanation: "This question helps determine if you're suited for dynamic roles in agritech or traditional farming.",
+  },
+  {
+    question: "What is your level of interest in agricultural research?",
+    options: ["Very high, I want to contribute to new discoveries", "Moderate, I’m interested in applied research", "Low, I prefer practical work", "None, I’m not interested in research"],
+    answer: 0,
+    explanation: "Your interest in research can guide you toward careers in agricultural science or hands-on farming.",
+  },
+  {
+    question: "How do you feel about working in agribusiness?",
+    options: ["I’m very interested in managing agricultural trade", "I prefer working on the production side", "I’m interested in both production and business", "I’m not interested in agribusiness"],
+    answer: 0,
+    explanation: "This helps determine if you're suited for roles in agribusiness, farm management, or production-focused careers.",
+  },
+  {
+    question: "What is your preferred method of learning?",
+    options: ["Hands-on experience", "Reading and research", "Collaborating with others", "Using technology and tools"],
+    answer: 0,
+    explanation: "Your learning style can guide you toward careers in hands-on farming, research, or agritech development.",
   }
 ];
+
 
 const AgricultureAssessment = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
