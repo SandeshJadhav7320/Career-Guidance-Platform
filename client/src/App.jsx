@@ -7,7 +7,7 @@ import Dashboard from "./components/Dashboard";
 import Profile from "./Dashboard_Components/Profile";
 import CarrerSelection from './Dashboard_Components/CarrerSelection';
 import AgricultureTest from "./assessment/AgricultureAssessment"; // ✅ Correct!
-import Technical from "./assessment/technical";
+import Technical from "./assessment/Technical";
 
 
 const App = () => {
