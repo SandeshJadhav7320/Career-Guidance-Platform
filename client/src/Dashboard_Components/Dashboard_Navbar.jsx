@@ -22,7 +22,7 @@ const Dashboard_Navbar = () => {
                         Take Assessment 🚀
                     </Link>
 
-                    <Link to="#" className="text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-300">
+                    <Link to="/careerpathpage" className="text-white bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-300">
                         Careers 🎯
                     </Link>
 

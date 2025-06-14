@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom"; // ✅ for navigation
 // ✅ Corrected: Stored questions in a separate variable (not an array component!)
 const agricultureQuestions = [
   {
@@ -98,23 +98,39 @@ const agricultureQuestions = [
 const AgricultureAssessment = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [score, setScore] = useState(0);
-  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [answers, setAnswers] = useState([]); // ✅ stores answers
+  const navigate = useNavigate(); // ✅ React Router navigation
 
   const handleAnswerClick = (index) => {
     setSelectedAnswer(index);
   };
 
-  const handleNextQuestion = () => {
-    if (selectedAnswer === agricultureQuestions[currentQuestion].answer) {
-      setScore(score + 1);
-    }
+  const handleNextQuestion = async () => {
+    // Save current answer
+    const updatedAnswers = [...answers, agricultureQuestions[currentQuestion].options[selectedAnswer]];
+    setAnswers(updatedAnswers);
 
     if (currentQuestion < agricultureQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);
     } else {
-      setQuizCompleted(true);
+      // ✅ All questions answered — send to backend
+      try {
+        const response = await fetch("http://localhost:8080/api/assessment/analyze", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedAnswers),
+        });
+
+        const result = await response.text(); // backend returns plain text
+        // ✅ Navigate to Career Path page with result
+        navigate("/careerpathpage", { state: { careerPath: result } });
+      } catch (error) {
+        console.error("Error fetching career path:", error);
+        alert("Something went wrong! Please try again.");
+      }
     }
   };
 
@@ -122,57 +138,42 @@ const AgricultureAssessment = () => {
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-10">
       <h1 className="text-3xl font-bold text-green-700 mb-6">Agriculture Career Assessment</h1>
 
-      {!quizCompleted ? (
-        <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-lg text-center">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            {agricultureQuestions[currentQuestion].question}
-          </h2>
-          
-          <div className="grid grid-cols-1 gap-4">
-            {agricultureQuestions[currentQuestion].options.map((option, index) => (
-              <button
-                key={index}
-                className={`px-6 py-3 rounded-md text-lg transition ${
-                  selectedAnswer === index ? "bg-green-500 text-white" : "bg-gray-200 hover:bg-gray-300"
-                }`}
-                onClick={() => handleAnswerClick(index)}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
+      <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-lg text-center">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          {agricultureQuestions[currentQuestion].question}
+        </h2>
 
-          {/* Progress Bar */}
-          <div className="w-full bg-gray-300 h-2 rounded-full mt-4">
-            <div className="bg-green-600 h-2 rounded-full" style={{ width: `${((currentQuestion + 1) / agricultureQuestions.length) * 100}%` }}></div>
-          </div>
-
-          <button
-            className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition"
-            onClick={handleNextQuestion}
-            disabled={selectedAnswer === null}
-          >
-            {currentQuestion < agricultureQuestions.length - 1 ? "Next" : "Submit"}
-          </button>
+        <div className="grid grid-cols-1 gap-4">
+          {agricultureQuestions[currentQuestion].options.map((option, index) => (
+            <button
+              key={index}
+              className={`px-6 py-3 rounded-md text-lg transition ${
+                selectedAnswer === index ? "bg-green-500 text-white" : "bg-gray-200 hover:bg-gray-300"
+              }`}
+              onClick={() => handleAnswerClick(index)}
+            >
+              {option}
+            </button>
+          ))}
         </div>
-      ) : (
-        <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-lg text-center">
-          <h2 className="text-2xl font-semibold text-gray-800">Your Score: {score} / {agricultureQuestions.length}</h2>
-          <p className="text-gray-600 mt-4">
-            Based on your answers, here are some suggested **career paths** in agriculture:
-          </p>
 
-          {score >= 3 ? (
-            <p className="text-green-600 font-bold mt-4">🌾 You might be suited for **Agricultural Research & Technology!** 🚜</p>
-          ) : score === 2 ? (
-            <p className="text-blue-600 font-bold mt-4">🚜 Consider **Farm Management & Agribusiness!**</p>
-          ) : (
-            <p className="text-red-600 font-bold mt-4">🍃 Explore **Organic Farming or Sustainable Agriculture!**</p>
-          )}
+        <div className="w-full bg-gray-300 h-2 rounded-full mt-4">
+          <div
+            className="bg-green-600 h-2 rounded-full"
+            style={{ width: `${((currentQuestion + 1) / agricultureQuestions.length) * 100}%` }}
+          ></div>
         </div>
-      )}
+
+        <button
+          className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition"
+          onClick={handleNextQuestion}
+          disabled={selectedAnswer === null}
+        >
+          {currentQuestion < agricultureQuestions.length - 1 ? "Next" : "Submit"}
+        </button>
+      </div>
     </div>
   );
 };
 
-export default AgricultureAssessment; // ✅ Fixed the export (Now exporting the actual React component!)
+export default AgricultureAssessment;

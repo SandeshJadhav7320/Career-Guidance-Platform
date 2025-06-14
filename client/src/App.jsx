@@ -8,6 +8,7 @@ import Profile from "./Dashboard_Components/Profile";
 import CarrerSelection from './Dashboard_Components/CarrerSelection';
 import AgricultureTest from "./assessment/AgricultureAssessment"; // ✅ Correct!
 import Technical from "./assessment/Technical";
+import CareerPathPage from "./Dashboard_Components/CareerPathPage";
 
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/CarrerSelection" element={<CarrerSelection />} />
           <Route path="/agriculture" element={<AgricultureTest />} />
           <Route path="/technical" element={<Technical />} />
+          <Route path="/careerpathpage" element={<CareerPathPage />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
