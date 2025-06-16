@@ -98,15 +98,14 @@ const agricultureQuestions = [
 const AgricultureAssessment = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [answers, setAnswers] = useState([]); // ✅ stores answers
-  const navigate = useNavigate(); // ✅ React Router navigation
+  const [answers, setAnswers] = useState([]);
+  const navigate = useNavigate();
 
   const handleAnswerClick = (index) => {
     setSelectedAnswer(index);
   };
 
   const handleNextQuestion = async () => {
-    // Save current answer
     const updatedAnswers = [...answers, agricultureQuestions[currentQuestion].options[selectedAnswer]];
     setAnswers(updatedAnswers);
 
@@ -114,7 +113,6 @@ const AgricultureAssessment = () => {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);
     } else {
-      // ✅ All questions answered — send to backend
       try {
         const response = await fetch("http://localhost:8080/api/assessment/analyze", {
           method: "POST",
@@ -124,9 +122,18 @@ const AgricultureAssessment = () => {
           body: JSON.stringify(updatedAnswers),
         });
 
-        const result = await response.text(); // backend returns plain text
-        // ✅ Navigate to Career Path page with result
-        navigate("/careerpathpage", { state: { careerPath: result } });
+        const result = await response.text();
+
+        // ✅ Wrap as array of objects for CareerPathPage
+        const careerPaths = [
+          {
+            title: "Suggested Career Path",
+            summary: result.substring(0, 100) + "...",
+            details: result,
+          },
+        ];
+
+        navigate("/careerpathpage", { state: { careerPaths } });
       } catch (error) {
         console.error("Error fetching career path:", error);
         alert("Something went wrong! Please try again.");
