@@ -3,6 +3,9 @@ package com.example.server.Assesment.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.http.*;
 
 import java.util.*;
@@ -11,13 +14,33 @@ import java.util.*;
 public class OpenAIService {
 
     @Value("${openrouter.api.key}")
-    private String apiKey;  // Renamed for clarity
+    private String apiKey;
 
-    public String getCareerPath(List<String> answers) {
+    public List<Map<String, Object>> getCareerPath(List<String> answers) {
         // Debug: check answers
         System.out.println("Received answers: " + answers);
 
-        String prompt = "Analyze these answers and suggest a career path: " + String.join(", ", answers);
+        // Use a prompt that asks for multiple options in JSON
+        String prompt = """
+        		You are an expert career advisor. 
+        		Given the answers, suggest 3-5 agriculture career paths. 
+        		For each, include:
+        		- title (string)
+        		- summary (string)
+        		- match (integer, between 70 and 100)
+
+        		Respond ONLY in JSON array format, like:
+        		[
+        		  {
+        		    "title": "Agronomist",
+        		    "summary": "Expert in soil and crop production...",
+        		    "match": 85
+        		  },
+        		  ...
+        		]
+
+        		Answers: """ + String.join(", ", answers);
+
 
         String url = "https://openrouter.ai/api/v1/chat/completions";
 
@@ -25,34 +48,37 @@ public class OpenAIService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // ✅ Ensure no trailing spaces
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey.trim());
-
-        // ✅ Recommended OpenRouter headers
         headers.set("HTTP-Referer", "http://localhost:3000");
         headers.set("X-Title", "Career Guidance Platform");
 
         Map<String, Object> body = new HashMap<>();
         body.put("model", "openai/gpt-3.5-turbo");
         body.put("messages", List.of(
-            Map.of("role", "user", "content", prompt)
+                Map.of("role", "user", "content", prompt)
         ));
-
-        // Debug: show request details
-        System.out.println("API Key: " + apiKey.trim());
-        System.out.println("Headers: " + headers);
-        System.out.println("Body: " + body);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
 
-        System.out.println("Raw Response: " + response.getBody());
+       
 
         Map choice = (Map) ((List) response.getBody().get("choices")).get(0);
         Map message = (Map) choice.get("message");
+        String content = message.get("content").toString().trim();
 
-        return message.get("content").toString();
+        // Parse the returned JSON array from the model's plain text
+        List<Map<String, Object>> careerPaths = new ArrayList<>();
+        try {
+            careerPaths = new ObjectMapper().readValue(content, List.class);
+        } catch (Exception e) {
+            System.err.println("Failed to parse GPT response, wrapping in fallback: " + e.getMessage());
+            // Fallback: wrap raw text
+            Map<String, Object> fallback = new HashMap<>();
+            careerPaths.add(fallback);
+        }
+
+        return careerPaths;
     }
 }

@@ -106,40 +106,35 @@ const AgricultureAssessment = () => {
   };
 
   const handleNextQuestion = async () => {
-    const updatedAnswers = [...answers, agricultureQuestions[currentQuestion].options[selectedAnswer]];
-    setAnswers(updatedAnswers);
+  const updatedAnswers = [...answers, agricultureQuestions[currentQuestion].options[selectedAnswer]];
+  setAnswers(updatedAnswers);
 
-    if (currentQuestion < agricultureQuestions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setSelectedAnswer(null);
-    } else {
-      try {
-        const response = await fetch("http://localhost:8080/api/assessment/analyze", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedAnswers),
-        });
+  if (currentQuestion < agricultureQuestions.length - 1) {
+    setCurrentQuestion(currentQuestion + 1);
+    setSelectedAnswer(null);
+  } else {
+    try {
+      const response = await fetch("http://localhost:8080/api/assessment/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedAnswers),
+      });
 
-        const result = await response.text();
+      // ✅ Use JSON, not text
+      const result = await response.json();
 
-        // ✅ Wrap as array of objects for CareerPathPage
-        const careerPaths = [
-          {
-            title: "Suggested Career Path",
-            summary: result.substring(0, 100) + "...",
-            details: result,
-          },
-        ];
+      // result is already an array of { title, summary, match, skills }
+      navigate("/careerpathpage", { state: { careerPaths: result } });
 
-        navigate("/careerpathpage", { state: { careerPaths } });
-      } catch (error) {
-        console.error("Error fetching career path:", error);
-        alert("Something went wrong! Please try again.");
-      }
+    } catch (error) {
+      console.error("Error fetching career path:", error);
+      alert("Something went wrong! Please try again.");
     }
-  };
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-10">
