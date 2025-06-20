@@ -3,11 +3,8 @@ package com.example.server.Assesment.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.http.*;
-
 import java.util.*;
 
 @Service
@@ -16,31 +13,76 @@ public class OpenAIService {
     @Value("${openrouter.api.key}")
     private String apiKey;
 
-    public List<Map<String, Object>> getCareerPath(List<String> answers) {
-        // Debug: check answers
+    // ✅ Updated method to take 'type'
+    public List<Map<String, Object>> getCareerPath(List<String> answers, String type) {
         System.out.println("Received answers: " + answers);
+        System.out.println("Assessment type: " + type);
 
-        // Use a prompt that asks for multiple options in JSON
-        String prompt = """
-        		You are an expert career advisor. 
-        		Given the answers, suggest 3-5 agriculture career paths. 
-        		For each, include:
-        		- title (string)
-        		- summary (string)
-        		- match (integer, between 70 and 100)
+        String prompt;
 
-        		Respond ONLY in JSON array format, like:
-        		[
-        		  {
-        		    "title": "Agronomist",
-        		    "summary": "Expert in soil and crop production...",
-        		    "match": 85
-        		  },
-        		  ...
-        		]
+        // ✅ Use if-else to choose the prompt based on type
+        if ("agriculture".equalsIgnoreCase(type)) {
+            prompt = """
+                You are an expert career advisor.
+                Given the answers, suggest 5-6 agriculture career paths.
+                For each, include:
+                - title (string)
+                - summary (string)
+                - match (integer, between 70 and 100)
 
-        		Answers: """ + String.join(", ", answers);
+                Respond ONLY in JSON array format, like:
+                [
+                  {
+                    "title": "Agronomist",
+                    "summary": "Expert in soil and crop production...",
+                    "match": 85
+                  },
+                  ...
+                ]
 
+                Answers: """ + String.join(", ", answers);
+        } else if ("technical".equalsIgnoreCase(type)) {
+            prompt = """
+                You are an expert career advisor.
+                Given the answers, suggest 5-6 technical career paths.
+                For each, include:
+                - title (string)
+                - summary (string)
+                - match (integer, between 70 and 100)
+
+                Respond ONLY in JSON array format, like:
+                [
+                  {
+                    "title": "Software Developer",
+                    "summary": "Builds and maintains software applications...",
+                    "match": 90
+                  },
+                  ...
+                ]
+
+                Answers: """ + String.join(", ", answers);
+        } else {
+            // Default to general advice if type is unknown
+            prompt = """
+                You are an expert career advisor.
+                Given the answers, suggest 5-6 general career paths.
+                For each, include:
+                - title (string)
+                - summary (string)
+                - match (integer, between 70 and 100)
+
+                Respond ONLY in JSON array format, like:
+                [
+                  {
+                    "title": "Project Manager",
+                    "summary": "Leads and coordinates projects...",
+                    "match": 80
+                  },
+                  ...
+                ]
+
+                Answers: """ + String.join(", ", answers);
+        }
 
         String url = "https://openrouter.ai/api/v1/chat/completions";
 
@@ -62,20 +104,18 @@ public class OpenAIService {
 
         ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
 
-       
-
         Map choice = (Map) ((List) response.getBody().get("choices")).get(0);
         Map message = (Map) choice.get("message");
         String content = message.get("content").toString().trim();
 
-        // Parse the returned JSON array from the model's plain text
         List<Map<String, Object>> careerPaths = new ArrayList<>();
         try {
             careerPaths = new ObjectMapper().readValue(content, List.class);
         } catch (Exception e) {
-            System.err.println("Failed to parse GPT response, wrapping in fallback: " + e.getMessage());
-            // Fallback: wrap raw text
+            System.err.println("Failed to parse GPT response: " + e.getMessage());
             Map<String, Object> fallback = new HashMap<>();
+            fallback.put("error", "Could not parse response");
+            fallback.put("raw", content);
             careerPaths.add(fallback);
         }
 

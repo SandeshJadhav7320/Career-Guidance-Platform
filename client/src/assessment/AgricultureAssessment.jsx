@@ -99,6 +99,7 @@ const AgricultureAssessment = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answers, setAnswers] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleAnswerClick = (index) => {
@@ -106,39 +107,58 @@ const AgricultureAssessment = () => {
   };
 
   const handleNextQuestion = async () => {
-  const updatedAnswers = [...answers, agricultureQuestions[currentQuestion].options[selectedAnswer]];
-  setAnswers(updatedAnswers);
+    const updatedAnswers = [
+      ...answers,
+      agricultureQuestions[currentQuestion].options[selectedAnswer],
+    ];
+    setAnswers(updatedAnswers);
 
-  if (currentQuestion < agricultureQuestions.length - 1) {
-    setCurrentQuestion(currentQuestion + 1);
-    setSelectedAnswer(null);
-  } else {
-    try {
-      const response = await fetch("http://localhost:8080/api/assessment/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedAnswers),
-      });
+    if (currentQuestion < agricultureQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedAnswer(null);
+    } else {
+      try {
+        setIsSubmitting(true);
 
-      // ✅ Use JSON, not text
-      const result = await response.json();
+        const response = await fetch(
+          "http://localhost:8080/api/assessment/analyze",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedAnswers),
+          }
+        );
 
-      // result is already an array of { title, summary, match, skills }
-      navigate("/careerpathpage", { state: { careerPaths: result } });
-
-    } catch (error) {
-      console.error("Error fetching career path:", error);
-      alert("Something went wrong! Please try again.");
+        const result = await response.json();
+        navigate("/careerpathpage", { state: { careerPaths: result } });
+      } catch (error) {
+        console.error("Error fetching career path:", error);
+        alert("Something went wrong! Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
-  }
-};
+  };
 
+  // ✅ Enhanced progress bar calculation
+  const progressPercent = Math.round(
+    ((currentQuestion + 1) / agricultureQuestions.length) * 100
+  );
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-10">
-      <h1 className="text-3xl font-bold text-green-700 mb-6">Agriculture Career Assessment</h1>
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-10 relative">
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="mt-4 text-blue-600 font-semibold">Submitting...</p>
+        </div>
+      )}
+
+      <h1 className="text-3xl font-bold text-green-700 mb-6">
+        Agriculture Career Assessment
+      </h1>
 
       <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-lg text-center">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
@@ -146,32 +166,43 @@ const AgricultureAssessment = () => {
         </h2>
 
         <div className="grid grid-cols-1 gap-4">
-          {agricultureQuestions[currentQuestion].options.map((option, index) => (
-            <button
-              key={index}
-              className={`px-6 py-3 rounded-md text-lg transition ${
-                selectedAnswer === index ? "bg-green-500 text-white" : "bg-gray-200 hover:bg-gray-300"
-              }`}
-              onClick={() => handleAnswerClick(index)}
-            >
-              {option}
-            </button>
-          ))}
+          {agricultureQuestions[currentQuestion].options.map(
+            (option, index) => (
+              <button
+                key={index}
+                className={`px-6 py-3 rounded-md text-lg transition ${
+                  selectedAnswer === index
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
+                onClick={() => handleAnswerClick(index)}
+                disabled={isSubmitting}
+              >
+                {option}
+              </button>
+            )
+          )}
         </div>
 
-        <div className="w-full bg-gray-300 h-2 rounded-full mt-4">
+        {/* ✅ Enhanced attractive progress bar */}
+        <div className="relative w-full bg-gray-300 h-4 rounded-full mt-6 overflow-hidden">
           <div
-            className="bg-green-600 h-2 rounded-full"
-            style={{ width: `${((currentQuestion + 1) / agricultureQuestions.length) * 100}%` }}
+            className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-500"
+            style={{ width: `${progressPercent}%` }}
           ></div>
+          <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm font-medium text-gray-700">
+            {progressPercent}%
+          </span>
         </div>
 
         <button
-          className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition"
+          className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleNextQuestion}
-          disabled={selectedAnswer === null}
+          disabled={selectedAnswer === null || isSubmitting}
         >
-          {currentQuestion < agricultureQuestions.length - 1 ? "Next" : "Submit"}
+          {currentQuestion < agricultureQuestions.length - 1
+            ? "Next"
+            : "Submit"}
         </button>
       </div>
     </div>
