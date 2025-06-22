@@ -9,6 +9,7 @@ import CarrerSelection from './Dashboard_Components/CarrerSelection';
 import AgricultureTest from "./assessment/AgricultureAssessment";
 import CareerPathPage from "./Dashboard_Components/CareerPathPage";
 import Technical from "./assessment/TechnicalAssesment";
+import Government from "./assessment/GovernmentAssesment";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/agriculture" element={<AgricultureTest />} />
           <Route path="/careerpathpage" element={<CareerPathPage />} />
           <Route path="/technical" element={<Technical />} />
+          <Route path="/government" element={<Government />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

@@ -61,7 +61,29 @@ public class OpenAIService {
                 ]
 
                 Answers: """ + String.join(", ", answers);
-        } else {
+        } 
+        else if ("government".equalsIgnoreCase(type)) {
+            prompt = """
+                You are an expert career advisor.
+                Given the answers, suggest 5-6 government career paths.
+                For each, include:
+                - title (string)
+                - summary (string)
+                - match (integer, between 70 and 100)
+
+                Respond ONLY in JSON array format, like:
+                [
+                  {
+                    "title": "Software Developer",
+                    "summary": "Builds and maintains software applications...",
+                    "match": 90
+                  },
+                  ...
+                ]
+
+                Answers: """ + String.join(", ", answers);
+        } 
+        else {
             // Default to general advice if type is unknown
             prompt = """
                 You are an expert career advisor.
