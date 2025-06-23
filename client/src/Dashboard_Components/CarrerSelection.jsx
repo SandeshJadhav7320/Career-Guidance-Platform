@@ -18,7 +18,7 @@ const CareerSelection = () => {
     { title: "Technical Jobs", icon: <FaTools />, path: "/technical" },
     { title: "Government Jobs", icon: <FaLandmark />, path: "/government" },
     { title: "Banking & Finance", icon: <FaUniversity />, path: "/banking" },
-    { title: "Administrative Services", icon: <FaBuilding />, path: "/assessment/administrative" },
+    { title: "Administrative Services", icon: <FaBuilding />, path: "/administrative" },
     { title: "General Knowledge", icon: <FaBuilding />, path: "/assessment/generalknowlwdge" },
   ];
 
