@@ -7,6 +7,7 @@ import com.example.server.CareerPath.repository.CareerPathRepository;
 
 import java.util.List;
 
+@Service
 public class CareerPathService {
 
 	
@@ -15,7 +16,7 @@ public class CareerPathService {
 
     // ✅ Save ONE career path
     public CareerPath saveCareerPath(CareerPath careerPath) {
-        return careerPathRepository.save(CareerPath);
+        return careerPathRepository.save(careerPath);
     }
 
     // ✅ Save MULTIPLE career paths

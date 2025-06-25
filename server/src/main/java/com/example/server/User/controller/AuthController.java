@@ -1,4 +1,3 @@
-// AuthController.java
 package com.example.server.User.controller;
 
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173") // ✅ Allow frontend requests
+@CrossOrigin(origins = "http://localhost:5173") // Allow frontend requests
 public class AuthController {
 
     private final UserRepository userRepository;

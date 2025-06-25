@@ -8,6 +8,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String googleId;
     private String email;
     private String name;
@@ -22,47 +23,43 @@ public class User {
         this.image = image;
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getGoogleId() {
-		return googleId;
-	}
+    public String getGoogleId() {
+        return googleId;
+    }
 
-	public void setGoogleId(String googleId) {
-		this.googleId = googleId;
-	}
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getImage() {
-		return image;
-	}
+    public String getImage() {
+        return image;
+    }
 
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-    // Getters & Setters
-    
-    
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

@@ -6,6 +6,8 @@ import com.example.server.Assesment.service.OpenAIService;
 import com.example.server.CareerPath.service.CareerPathService;
 import com.example.server.Assesment.DTO.AssessmentRequest;
 import org.springframework.http.ResponseEntity;
+import com.example.server.CareerPath.model.CareerPath;
+
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class CareerPathController {
         List<Map<String, Object>> result = openAIService.getCareerPath(request.getAnswers(), request.getType());
         
      // 2. Convert each path to CareerPath entity
-        List<CarrerPath> pathsToSave = result.stream().map(path -> {
+        List<CareerPath> pathsToSave = result.stream().map(path -> {
             CareerPath cp = new CareerPath();
             cp.setTitle(path.get("title").toString());
             cp.setSummary(path.get("summary").toString());

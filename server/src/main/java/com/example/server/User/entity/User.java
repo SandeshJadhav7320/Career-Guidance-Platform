@@ -1,68 +1,65 @@
-package com.example.server.User.entity;
+package com.example.server.User.model;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    @Column(unique = true, nullable = false)
+    private String googleId;
     private String email;
-
-    private String password;
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date createdAt = new java.util.Date();
+    private String name;
+    private String image;
 
     public User() {}
 
-    public User(String name, String email, String password) {
-        this.name = name;
+    public User(String googleId, String email, String name, String image) {
+        this.googleId = googleId;
         this.email = email;
-        this.password = password;
+        this.name = name;
+        this.image = image;
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getGoogleId() {
+        return googleId;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    // Getters and Setters
-    
-    
-    // (Generate using your IDE)
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
-
