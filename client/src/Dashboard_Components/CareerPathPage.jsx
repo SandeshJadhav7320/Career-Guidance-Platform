@@ -8,7 +8,13 @@ const CareerPathPage = () => {
   const careerPaths = location.state?.careerPaths || [];
 
   const handleMore =(path)=>{
-    navigate('/carrerpathdetail', { state: { path } });
+    navigate("/careerpathdetail", {
+  state: {
+    title: path.title,
+    prompt: `Give me required information, roadmap and resources about ${path.title}`,
+  },
+});
+
   }
   return (
     <>
