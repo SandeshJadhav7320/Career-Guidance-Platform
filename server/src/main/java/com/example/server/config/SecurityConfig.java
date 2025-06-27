@@ -22,7 +22,8 @@ public class SecurityConfig {
             .authorizeHttpRequests()
                 .requestMatchers(
                     "/api/auth/google-login",
-                    "/api/assessment/analyze"
+                    "/api/assessment/analyze",
+                    "/api/title"
                 ).permitAll()
                 .anyRequest().authenticated()
             .and()
