@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Dashboard_Navbar from "../Dashboard_Components/Dashboard_Navbar";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 const CareerPathDetail = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { title } = location.state || {};
 
   const [careerInfo, setCareerInfo] = useState("");
@@ -33,34 +35,79 @@ const CareerPathDetail = () => {
     }
   }, [title]);
 
+  // Convert lines starting with - or * to <li> items
+  const renderFormattedSection = (text) => {
+    const lines = text.trim().split("\n");
+    const isBulletList = lines.every((line) => /^[-*]\s/.test(line));
+
+    if (isBulletList) {
+      return (
+        <ul className="list-disc list-inside space-y-1">
+          {lines.map((line, idx) => (
+            <li key={idx}>{line.replace(/^[-*]\s/, "")}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    return <p>{text}</p>;
+  };
+
   return (
     <>
       <Dashboard_Navbar />
-      <div className="min-h-screen bg-gray-50 px-6 py-10">
-        <h1 className="text-4xl font-bold text-green-700 text-center mb-8">
+
+      <div className="min-h-screen bg-white px-6 py-8 md:px-12 lg:px-32">
+        {/* Back Button */}
+        <div className="mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-green-700 hover:underline"
+          >
+            <ArrowLeft size={20} />
+            Back
+          </button>
+        </div>
+
+        {/* Title */}
+        <h1 className="text-4xl font-bold text-green-800 mb-8 text-center">
           {title}
         </h1>
 
+        {/* Loading */}
         {loading && (
           <div className="flex justify-center items-center h-40">
-            <p className="text-lg text-gray-500 animate-pulse">Loading...</p>
+            <Loader2 className="animate-spin text-green-600" size={32} />
           </div>
         )}
 
+        {/* Error */}
         {error && (
-          <div className="flex justify-center items-center h-40">
-            <p className="text-red-500 text-center text-lg">{error}</p>
-          </div>
+          <div className="text-red-600 text-center text-lg">{error}</div>
         )}
 
+        {/* Career Info */}
         {!loading && !error && careerInfo && (
-          <div className="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Career Path Information
-            </h2>
-            <div className="text-gray-700 leading-relaxed whitespace-pre-line max-h-[600px] overflow-y-auto pr-2">
-              {careerInfo}
-            </div>
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-md border border-gray-200 space-y-6 leading-relaxed text-gray-800 whitespace-pre-line">
+            {careerInfo.split("\n\n").map((section, index) => {
+              const [heading, ...body] = section.split(":");
+              const content = body.join(":").trim();
+
+              return (
+                <div key={index} className="space-y-2">
+                  {body.length > 0 ? (
+                    <>
+                      <h2 className="text-xl font-bold text-green-700">
+                        {heading.trim()}:
+                      </h2>
+                      {renderFormattedSection(content)}
+                    </>
+                  ) : (
+                    <p>{section}</p>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
