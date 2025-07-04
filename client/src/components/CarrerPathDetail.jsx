@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Dashboard_Navbar from "../Dashboard_Components/Dashboard_Navbar";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, BookOpen, Star, Code, ListChecks } from "lucide-react";
 
 const CareerPathDetail = () => {
   const location = useLocation();
@@ -35,22 +35,13 @@ const CareerPathDetail = () => {
     }
   }, [title]);
 
-  // Convert lines starting with - or * to <li> items
-  const renderFormattedSection = (text) => {
-    const lines = text.trim().split("\n");
-    const isBulletList = lines.every((line) => /^[-*]\s/.test(line));
-
-    if (isBulletList) {
-      return (
-        <ul className="list-disc list-inside space-y-1">
-          {lines.map((line, idx) => (
-            <li key={idx}>{line.replace(/^[-*]\s/, "")}</li>
-          ))}
-        </ul>
-      );
-    }
-
-    return <p>{text}</p>;
+  const getIconForHeader = (headerText) => {
+    const lower = headerText.toLowerCase();
+    if (lower.includes("roadmap")) return <ListChecks className="inline mr-2 text-green-600" size={20} />;
+    if (lower.includes("skills")) return <Star className="inline mr-2 text-yellow-500" size={20} />;
+    if (lower.includes("resources")) return <BookOpen className="inline mr-2 text-blue-600" size={20} />;
+    if (lower.includes("technologies") || lower.includes("tools")) return <Code className="inline mr-2 text-purple-600" size={20} />;
+    return null;
   };
 
   return (
@@ -70,9 +61,7 @@ const CareerPathDetail = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl font-bold text-green-800 mb-8 text-center">
-          {title}
-        </h1>
+        <h1 className="text-4xl font-bold text-green-800 mb-8 text-center">{title}</h1>
 
         {/* Loading */}
         {loading && (
@@ -82,31 +71,55 @@ const CareerPathDetail = () => {
         )}
 
         {/* Error */}
-        {error && (
-          <div className="text-red-600 text-center text-lg">{error}</div>
-        )}
+        {error && <div className="text-red-600 text-center text-lg">{error}</div>}
 
         {/* Career Info */}
         {!loading && !error && careerInfo && (
-          <div className="bg-gray-50 p-6 rounded-2xl shadow-md border border-gray-200 space-y-6 leading-relaxed text-gray-800 whitespace-pre-line">
-            {careerInfo.split("\n\n").map((section, index) => {
-              const [heading, ...body] = section.split(":");
-              const content = body.join(":").trim();
+          <div className="bg-gray-50 p-6 rounded-2xl shadow-md border border-gray-200 space-y-4 leading-relaxed text-gray-800">
+            {careerInfo.split("\n").map((line, index) => {
+              const cleanedLine = line.trim();
 
-              return (
-                <div key={index} className="space-y-2">
-                  {body.length > 0 ? (
-                    <>
-                      <h2 className="text-xl font-bold text-green-700">
-                        {heading.trim()}:
-                      </h2>
-                      {renderFormattedSection(content)}
-                    </>
-                  ) : (
-                    <p>{section}</p>
-                  )}
-                </div>
-              );
+              // H1 headers
+              if (/^#\s+/.test(cleanedLine)) {
+                const heading = cleanedLine.replace(/^#\s+/, "");
+                return (
+                  <h1 key={index} className="text-3xl font-bold text-black mt-6 mb-4 flex items-center">
+                    {getIconForHeader(heading)}
+                    {heading}
+                  </h1>
+                );
+              }
+
+              // H2 headers
+              if (/^##\s+/.test(cleanedLine)) {
+                const heading = cleanedLine.replace(/^##\s+/, "");
+                return (
+                  <h2 key={index} className="text-2xl font-bold text-black mt-5 mb-3 flex items-center">
+                    {getIconForHeader(heading)}
+                    {heading}
+                  </h2>
+                );
+              }
+
+              // Bullet List
+              if (/^[-*]\s/.test(cleanedLine)) {
+                return (
+                  <ul key={index} className="list-disc list-inside ml-6">
+                    <li>{cleanedLine.replace(/^[-*]\s/, "")}</li>
+                  </ul>
+                );
+              }
+
+              // Paragraph
+              if (cleanedLine.length > 0) {
+                return (
+                  <p key={index} className="text-gray-700 mb-2">
+                    {cleanedLine}
+                  </p>
+                );
+              }
+
+              return null;
             })}
           </div>
         )}
