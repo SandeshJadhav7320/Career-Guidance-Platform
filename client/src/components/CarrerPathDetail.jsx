@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Dashboard_Navbar from "../Dashboard_Components/Dashboard_Navbar";
 import { Loader2, ArrowLeft, BookOpen, Star, Code, ListChecks } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+
 
 const CareerPathDetail = () => {
   const location = useLocation();
@@ -104,9 +106,33 @@ const CareerPathDetail = () => {
               // Bullet List
               if (/^[-*]\s/.test(cleanedLine)) {
                 return (
-                  <ul key={index} className="list-disc list-inside ml-6">
-                    <li>{cleanedLine.replace(/^[-*]\s/, "")}</li>
-                  </ul>
+                 <ul key={index} className="list-disc list-inside ml-6">
+      <li>
+        {(() => {
+          const content = cleanedLine.replace(/^[-*]\s/, "");
+
+          // Match markdown-style [text](url)
+          const match = content.match(/\[(.+?)\]\((https?:\/\/[^\s]+)\)/);
+
+          if (match) {
+            const [_, linkText, url] = match;
+            return (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                {linkText}
+              </a>
+            );
+          }
+
+          return content;
+        })()}
+      </li>
+</ul>
+
                 );
               }
 
