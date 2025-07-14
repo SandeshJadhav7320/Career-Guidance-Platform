@@ -35,7 +35,7 @@ const Dashboard = () => {
     {/* Left Content */}
     <div className="w-full md:w-1/2 pl-0 ml-0 text-left space-y-4">
       <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
-        Welcome, {user.name}
+        Welcome,{user.name}
       </h1>
       <h2 className="text-5xl md:text-6xl font-bold text-gray-900">
         Personalized <br />
