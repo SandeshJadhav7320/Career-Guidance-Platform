@@ -55,6 +55,90 @@ const CareerPathDetail = () => {
     return null;
   };
 
+  const handleSelectCareerPath = () => {
+  let userId = localStorage.getItem("user-id");
+
+  // 🛠 Try to recover from user-info if user-id is missing
+  if ((!userId || userId === "null" || userId === "undefined") && localStorage.getItem("user-info")) {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem("user-info"));
+      userId = userInfo?.id || userInfo?._id;
+      if (userId) {
+        localStorage.setItem("user-id", userId);
+        console.log("✅ Recovered and stored user-id from user-info:", userId);
+      }
+    } catch (err) {
+      console.warn("⚠️ Failed to parse user-info.");
+    }
+  }
+
+  // ❌ Still missing
+  if (!userId || userId === "null" || userId === "undefined") {
+    console.error("❌ No valid userId found in localStorage.");
+    alert("Please log in before selecting a career path.");
+    return;
+  }
+
+  console.log("✅ Using userId:", userId);
+
+  const sections = {
+    overview: "",
+    requiredSkills: "",
+    educationalPath: "",
+    certifications: "",
+    toolsAndTechnologies: "",
+    resources: "",
+    careerGrowth: "",
+    projects: "",
+    communities: "",
+  };
+
+  let current = "";
+
+  careerInfo.split("\n").forEach((line) => {
+    const clean = line.trim().toLowerCase();
+    if (clean.includes("overview")) current = "overview";
+    else if (clean.includes("required skills")) current = "requiredSkills";
+    else if (clean.includes("educational path")) current = "educationalPath";
+    else if (clean.includes("certifications")) current = "certifications";
+    else if (clean.includes("tools") || clean.includes("technologies")) current = "toolsAndTechnologies";
+    else if (clean.includes("resources")) current = "resources";
+    else if (clean.includes("career growth")) current = "careerGrowth";
+    else if (clean.includes("projects")) current = "projects";
+    else if (clean.includes("communities")) current = "communities";
+    else if (current) sections[current] += line + "\n";
+  });
+
+  const payload = {
+    userId: parseInt(userId, 10),
+    title,
+    ...sections,
+  };
+
+  console.log("📦 Sending payload to backend:", payload);
+
+  fetch("http://localhost:8080/api/save-career-path", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+    .then((res) => {
+      if (res.ok) {
+        alert(`Career path "${title}" saved successfully.`);
+      } else {
+        res.text().then((msg) => console.error("❌ Server Error:", msg));
+        alert("Failed to save career path.");
+      }
+    })
+    .catch((err) => {
+      console.error("❌ Fetch error:", err);
+      alert("An error occurred while saving.");
+    });
+};
+
+
+
+
   return (
     <>
       <Dashboard_Navbar />
@@ -185,6 +269,16 @@ const CareerPathDetail = () => {
             })()}
           </div>
         )}
+
+        <div className="mt-10 flex justify-center">
+  <button
+    onClick={handleSelectCareerPath}
+    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 transition"
+  >
+    Select this Career Path
+  </button>
+</div>
+
       </div>
     </>
   );

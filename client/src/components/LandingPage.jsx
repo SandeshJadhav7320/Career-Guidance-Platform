@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
-import heroImage from "../assets/hero.png";
+import heroImage from "../assets/filehero.svg";
 import { googleAuth } from "../api";
 import {FaFacebook,FaTwitter,FaLinkedin,FaInstagram,FaQuestionCircle,FaBrain,FaUsers,FaSignInAlt,} from "react-icons/fa";
 import careerSymbol from "../assets/career-symbol.png";
@@ -54,7 +54,7 @@ const LandingPage = () => {
     <>
       <nav className="bg-gray-100 shadow-md py-4 px-6 flex items-center justify-between">
         <div className="flex items-center">
-          <img src={careerSymbol} alt="Career Guide AI Logo" className="w-15 h-auto rounded-md shadow-lg bg-gray-100" />
+          <img src={careerSymbol} alt="Career Guide AI Logo" className="w-15 h-auto rounded-md shadow-lg bg-gray-100 rounded-4xl" />
         </div>
         <button
           onClick={() => googleLogin()}
