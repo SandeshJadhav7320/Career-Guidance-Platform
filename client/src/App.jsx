@@ -13,7 +13,8 @@ import Government from "./assessment/GovernmentAssesment";
 import BankingAssesment from "./assessment/BankingAssesment";
 import AdministrativeAssesment from "./assessment/AdministrativeAssesment";
 import CarrerPathDetails from "./components/CarrerPathDetail";
-import SelectedCarrerPath from "./components/SelectedCarrerPath"
+import SelectedCarrerPath from "./components/SelectedCarrerPath";
+import SelectedDetailedInfo from "./components/SelectedDetailedInfo";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/administrative" element={<AdministrativeAssesment />} />
           <Route path="/carrerpathdetail" element={<CarrerPathDetails />} />
           <Route path="/selectedcarrerpath" element={<SelectedCarrerPath />} />
+          <Route path="/career-detail/:id" element={<SelectedDetailedInfo />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

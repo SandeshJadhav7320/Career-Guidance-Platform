@@ -23,7 +23,10 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/auth/google-login",
                     "/api/assessment/analyze",
-                    "/api/title"
+                    "/api/title",
+                    "/api/save-career-path",
+                    "/api/get-career-path",
+                    "/api/get-career-path-by-id"
                 ).permitAll()
                 .anyRequest().authenticated()
             .and()

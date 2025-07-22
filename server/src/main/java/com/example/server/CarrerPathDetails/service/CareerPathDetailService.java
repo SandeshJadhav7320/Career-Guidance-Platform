@@ -24,7 +24,7 @@ public class CareerPathDetailService {
             - Educational path
             - Certifications
             - Tools/technologies to learn
-            - Free and paid resources (courses, platforms)
+            - Free and paid resources (courses, platforms) with there suggested links
             - Career growth opportunities
             - Real-world projects to practice
             - Communities to join

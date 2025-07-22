@@ -1,5 +1,6 @@
 package com.example.server.User.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.server.User.repository.UserRepository;
 import com.example.server.User.model.User;
@@ -8,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173") // Allow frontend requests
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final UserRepository userRepository;
@@ -19,17 +20,16 @@ public class AuthController {
     }
 
     @PostMapping("/google-login")
-    public User loginWithGoogle(@RequestBody User userData) {
-        logger.info("Received Google Login Request: {}", userData.getEmail());
-
+    public ResponseEntity<User> loginWithGoogle(@RequestBody User userData) {
         User existingUser = userRepository.findByEmail(userData.getEmail());
 
         if (existingUser == null) {
-            logger.info("New user - saving to database");
-            return userRepository.save(userData);
+            User savedUser = userRepository.save(userData);
+            return ResponseEntity.ok(savedUser); // ✔ new user with ID
         }
 
-        logger.info("Existing user - logging in");
-        return existingUser;
+        return ResponseEntity.ok(existingUser); // ✔ existing user with ID
     }
+
 }
+

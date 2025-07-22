@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Dashboard_Navbar from "../Dashboard_Components/Dashboard_Navbar";
 
-function SelectedCarrerPath() {
+function SelectedCareerPath() {
   const [careerPaths, setCareerPaths] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userId = localStorage.getItem("user-id");
@@ -39,19 +41,8 @@ function SelectedCarrerPath() {
           Your Selected Career Paths
         </h1>
 
-        {loading && (
-          <div className="text-center text-gray-500">Loading...</div>
-        )}
-
-        {error && (
-          <div className="text-center text-red-600 font-semibold">{error}</div>
-        )}
-
-        {!loading && !error && careerPaths.length === 0 && (
-          <div className="text-center text-gray-500">
-            No career paths selected yet.
-          </div>
-        )}
+        {loading && <div className="text-center text-gray-500">Loading...</div>}
+        {error && <div className="text-center text-red-600 font-semibold">{error}</div>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {careerPaths.map((career, idx) => (
@@ -62,10 +53,15 @@ function SelectedCarrerPath() {
               <h2 className="text-xl font-bold text-blue-700 mb-2">
                 {career.title}
               </h2>
-              <p className="text-gray-700 whitespace-pre-line line-clamp-5">
-                {career.overview || "No overview available."}
+              <p className="text-gray-700 whitespace-pre-line line-clamp-4 mb-4">
+                {career.overview}
               </p>
-              {/* Add more fields if needed */}
+              <button
+                onClick={() => navigate(`/career-detail/${career.id}`)}
+                className="text-sm text-blue-600 font-semibold hover:underline"
+              >
+                See More →
+              </button>
             </div>
           ))}
         </div>
@@ -74,4 +70,4 @@ function SelectedCarrerPath() {
   );
 }
 
-export default SelectedCarrerPath;
+export default SelectedCareerPath;
