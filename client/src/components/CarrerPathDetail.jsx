@@ -55,32 +55,54 @@ const CareerPathDetail = () => {
     return null;
   };
 
-  const handleSelectCareerPath = () => {
-  let userId = localStorage.getItem("user-id");
+  const emphasizeHeader = (headingText) => {
+    const keywords = [
+      "Overview",
+      "Required Skills",
+      "Educational Path",
+      "Certifications",
+      "Tools",
+      "Technologies",
+      "Free and Paid Resources",
+      "Resources",
+      "Career Growth Opportunities",
+      "Real-world Projects",
+      "Communities to Join",
+    ];
 
-  // 🛠 Try to recover from user-info if user-id is missing
-  if ((!userId || userId === "null" || userId === "undefined") && localStorage.getItem("user-info")) {
-    try {
-      const userInfo = JSON.parse(localStorage.getItem("user-info"));
-      userId = userInfo?.id || userInfo?._id;
-      if (userId) {
-        localStorage.setItem("user-id", userId);
-        console.log("✅ Recovered and stored user-id from user-info:", userId);
-      }
-    } catch (err) {
-      console.warn("⚠️ Failed to parse user-info.");
+    for (const keyword of keywords) {
+      const regex = new RegExp(`\\b(${keyword})\\b`, "gi");
+      headingText = headingText.replace(regex, "<strong>$1</strong>");
     }
-  }
 
-  // ❌ Still missing
-  if (!userId || userId === "null" || userId === "undefined") {
-    console.error("❌ No valid userId found in localStorage.");
+    return headingText;
+  };
+
+  const handleSelectCareerPath = () => {
+  const userInfoRaw = localStorage.getItem("user-info");
+
+  if (!userInfoRaw) {
     alert("Please log in before selecting a career path.");
     return;
   }
 
-  console.log("✅ Using userId:", userId);
+  let userId = "";
+  try {
+    const userInfo = JSON.parse(userInfoRaw);
+    userId = userInfo?.id?.toString();
 
+    if (!userId) {
+      throw new Error("Missing user ID in user-info.");
+    }
+
+    console.log("✅ Using userId:", userId);
+  } catch (err) {
+    console.error("❌ Failed to parse user-info or missing ID:", err);
+    alert("Invalid user data. Please log in again.");
+    return;
+  }
+
+  // Parse content into sections
   const sections = {
     overview: "",
     requiredSkills: "",
@@ -110,12 +132,12 @@ const CareerPathDetail = () => {
   });
 
   const payload = {
-    userId: parseInt(userId, 10),
+    userId, // ✅ Always from localStorage "user-info"
     title,
     ...sections,
   };
 
-  console.log("📦 Sending payload to backend:", payload);
+  console.log("📤 Sending payload:", payload);
 
   fetch("http://localhost:8080/api/save-career-path", {
     method: "POST",
@@ -126,8 +148,10 @@ const CareerPathDetail = () => {
       if (res.ok) {
         alert(`Career path "${title}" saved successfully.`);
       } else {
-        res.text().then((msg) => console.error("❌ Server Error:", msg));
-        alert("Failed to save career path.");
+        res.text().then((msg) => {
+          console.error("❌ Server error:", msg);
+          alert("Failed to save career path.");
+        });
       }
     })
     .catch((err) => {
@@ -138,13 +162,11 @@ const CareerPathDetail = () => {
 
 
 
-
   return (
     <>
       <Dashboard_Navbar />
 
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 px-6 py-8 md:px-12 lg:px-32">
-        {/* Back Button */}
         <div className="mb-6">
           <button
             onClick={() => navigate(-1)}
@@ -155,24 +177,20 @@ const CareerPathDetail = () => {
           </button>
         </div>
 
-        {/* Title */}
         <h1 className="text-4xl font-bold text-green-800 mb-10 text-center">
           {title}
         </h1>
 
-        {/* Loading */}
         {loading && (
           <div className="flex justify-center items-center h-40">
             <Loader2 className="animate-spin text-green-600" size={32} />
           </div>
         )}
 
-        {/* Error */}
         {error && (
           <div className="text-red-600 text-center text-lg">{error}</div>
         )}
 
-        {/* Career Info */}
         {!loading && !error && careerInfo && (
           <div className="bg-white/70 backdrop-blur-xl p-8 rounded-3xl shadow-xl border border-gray-200 space-y-4 leading-relaxed text-gray-800 transition-all">
             {(() => {
@@ -183,44 +201,39 @@ const CareerPathDetail = () => {
               lines.forEach((line, index) => {
                 const cleanedLine = line.trim();
 
-                // H1
                 if (/^#\s+/.test(cleanedLine)) {
                   const heading = cleanedLine.replace(/^#\s+/, "");
+                  const emphasizedHeading = emphasizeHeader(heading);
                   elements.push(
                     <h1
                       key={index}
                       className="text-3xl font-extrabold text-gray-900 mt-6 mb-4 flex items-center"
                     >
                       {getIconForHeader(heading)}
-                      {heading}
+                      <span dangerouslySetInnerHTML={{ __html: emphasizedHeading }} />
                     </h1>
                   );
                   return;
                 }
 
-                // H2
                 if (/^##\s+/.test(cleanedLine)) {
                   const heading = cleanedLine.replace(/^##\s+/, "");
-                  insideResourcesSection =
-                    heading.toLowerCase().includes("resources");
-
+                  insideResourcesSection = heading.toLowerCase().includes("resources");
+                  const emphasizedHeading = emphasizeHeader(heading);
                   elements.push(
                     <h2
                       key={index}
                       className="text-2xl font-semibold text-gray-800 mt-5 mb-3 flex items-center"
                     >
                       {getIconForHeader(heading)}
-                      {heading}
+                      <span dangerouslySetInnerHTML={{ __html: emphasizedHeading }} />
                     </h2>
                   );
                   return;
                 }
 
-                // Inside "Recommended Resources" - render as card
                 if (insideResourcesSection && /^[-*]\s/.test(cleanedLine)) {
-                  const match = cleanedLine.match(
-                    /\[(.+?)\]\((https?:\/\/[^\s]+)\)/
-                  );
+                  const match = cleanedLine.match(/\[(.+?)\]\((https?:\/\/[^\s]+)\)/);
                   if (match) {
                     const [_, linkText, url] = match;
                     elements.push(
@@ -245,7 +258,6 @@ const CareerPathDetail = () => {
                   }
                 }
 
-                // Bullet list (non-resource)
                 if (/^[-*]\s/.test(cleanedLine)) {
                   elements.push(
                     <ul key={index} className="list-disc list-inside ml-6">
@@ -255,14 +267,21 @@ const CareerPathDetail = () => {
                   return;
                 }
 
-                // Paragraph
                 if (cleanedLine.length > 0) {
-                  elements.push(
-                    <p key={index} className="text-gray-700 mb-3 text-base">
-                      {cleanedLine}
-                    </p>
-                  );
-                }
+  const parsedLine = cleanedLine.replace(
+    /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+    '<a href="$2" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">$1</a>'
+  );
+
+  elements.push(
+    <p
+      key={index}
+      className="text-gray-700 mb-3 text-base"
+      dangerouslySetInnerHTML={{ __html: parsedLine }}
+    />
+  );
+}
+
               });
 
               return elements;
@@ -271,14 +290,13 @@ const CareerPathDetail = () => {
         )}
 
         <div className="mt-10 flex justify-center">
-  <button
-    onClick={handleSelectCareerPath}
-    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 transition"
-  >
-    Select this Career Path
-  </button>
-</div>
-
+          <button
+            onClick={handleSelectCareerPath}
+            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:bg-blue-700 transition"
+          >
+            Select this Career Path
+          </button>
+        </div>
       </div>
     </>
   );
