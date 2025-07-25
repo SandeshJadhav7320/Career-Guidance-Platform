@@ -161,6 +161,8 @@ const BankingAssesment = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answers, setAnswers] = useState([]);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleAnswerClick = (index) => {
     setSelectedAnswer(index);
@@ -177,28 +179,28 @@ const BankingAssesment = () => {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedAnswer(null);
     } else {
-      try {
-        const response = await fetch(
-          "http://localhost:8080/api/assessment/analyze",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              answers: updatedAnswers,
-              type: "banking",
-            }),
-          }
-        );
+  setIsLoading(true); // Start loader
 
-        const result = await response.json();
-        navigate("/careerpathpage", { state: { careerPaths: result } });
-      } catch (error) {
-        console.error("Error fetching career path:", error);
-        alert("Something went wrong! Please try again.");
-      }
-    }
+  try {
+    const response = await fetch("http://localhost:8080/api/assessment/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        answers: updatedAnswers,
+        type: "bancking",
+      }),
+    });
+
+    const result = await response.json();
+    navigate("/careerpathpage", { state: { careerPaths: result } });
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Something went wrong!");
+  } finally {
+    setIsLoading(false); // Stop loader
+  }
+}
+
   };
 
   const progressPercent = ((currentQuestion + 1) / banckingQuestions.length) * 100;
@@ -241,17 +243,25 @@ const BankingAssesment = () => {
           {Math.round(progressPercent)}% complete
         </p>
 
-        <button
-          className={`mt-6 px-6 py-3 rounded-md shadow transition ${
-            selectedAnswer !== null
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "bg-gray-400 text-gray-100 cursor-not-allowed"
-          }`}
-          onClick={handleNextQuestion}
-          disabled={selectedAnswer === null}
-        >
-          {currentQuestion < banckingQuestions.length - 1 ? "Next" : "Submit"}
-        </button>
+        {isLoading ? (
+  <div className="mt-6 flex justify-center items-center">
+    <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    <span className="ml-3 text-blue-600 font-medium">Analyzing your results...</span>
+  </div>
+) : (
+  <button
+    className={`mt-6 px-6 py-3 rounded-md shadow transition ${
+      selectedAnswer !== null
+        ? "bg-blue-600 text-white hover:bg-blue-700"
+        : "bg-gray-400 text-gray-100 cursor-not-allowed"
+    }`}
+    onClick={handleNextQuestion}
+    disabled={selectedAnswer === null}
+  >
+    {currentQuestion < banckingQuestions.length - 1 ? "Next" : "Submit"}
+  </button>
+)}
+
       </div>
     </div>
   );
