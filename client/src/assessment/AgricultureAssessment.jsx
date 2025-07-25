@@ -4,94 +4,139 @@ import { useNavigate } from "react-router-dom"; // ✅ for navigation
 const agricultureQuestions = [
   {
     question: "Which activities do you enjoy doing in your free time?",
-    options: ["Working with plants and soil", "Operating farming equipment", "Analyzing agricultural data", "Learning about organic farming"],
-    answer: 0,
-    explanation: "Your preference will determine whether you’re best suited for hands-on farming, agricultural engineering, research, or sustainability-focused roles.",
+    options: [
+      "Working with plants and soil",
+      "Operating farming equipment",
+      "Analyzing agricultural data",
+      "Learning about organic farming",
+    ],
   },
   {
     question: "How comfortable are you with outdoor work?",
-    options: ["I enjoy working outdoors daily", "I prefer occasional outdoor work", "I would rather work in an office/research lab", "I prefer a mix of outdoor and desk work"],
-    answer: 0,
-    explanation: "This helps analyze if you're suited for farm management, agribusiness, or research-based roles.",
+    options: [
+      "I enjoy working outdoors daily",
+      "I prefer occasional outdoor work",
+      "I would rather work in an office/research lab",
+      "I prefer a mix of outdoor and desk work",
+    ],
   },
   {
     question: "What aspect of agriculture interests you the most?",
-    options: ["Crop cultivation and soil health", "Agriculture technology (AI, automation)", "Business and agricultural trading", "Organic farming and sustainability"],
-    answer: 0,
-    explanation: "Your interest aligns with careers like Farm Manager, Precision Agriculture Engineer, Agribusiness Expert, or Organic Farming Specialist.",
+    options: [
+      "Crop cultivation and soil health",
+      "Agriculture technology (AI, automation)",
+      "Business and agricultural trading",
+      "Organic farming and sustainability",
+    ],
   },
   {
     question: "How do you feel about working with technology in agriculture?",
-    options: ["I enjoy using advanced tools and machinery", "I prefer traditional farming methods", "I like analyzing data for decision-making", "I’m interested in developing new technologies"],
-    answer: 0,
-    explanation: "This helps determine if you're suited for roles in precision agriculture, agritech development, or traditional farming.",
+    options: [
+      "I enjoy using advanced tools and machinery",
+      "I prefer traditional farming methods",
+      "I like analyzing data for decision-making",
+      "I’m interested in developing new technologies",
+    ],
   },
   {
     question: "What type of work environment do you prefer?",
-    options: ["Outdoors in the field", "In a lab or research facility", "In an office managing operations", "A mix of outdoor and indoor work"],
-    answer: 0,
-    explanation: "Your work environment preference can guide you toward careers like farm management, agricultural research, or agribusiness.",
+    options: [
+      "Outdoors in the field",
+      "In a lab or research facility",
+      "In an office managing operations",
+      "A mix of outdoor and indoor work",
+    ],
   },
   {
     question: "How important is sustainability to you in agriculture?",
-    options: ["Very important, I want to focus on organic farming", "Somewhat important, I prefer balancing profit and sustainability", "Not very important, I focus on maximizing yields", "I’m neutral about sustainability"],
-    answer: 0,
-    explanation: "This question helps identify if you're inclined toward organic farming, agribusiness, or high-yield farming techniques.",
+    options: [
+      "Very important, I want to focus on organic farming",
+      "Somewhat important, I prefer balancing profit and sustainability",
+      "Not very important, I focus on maximizing yields",
+      "I’m neutral about sustainability",
+    ],
   },
   {
     question: "Do you enjoy working with animals?",
-    options: ["Yes, I love working with livestock", "I prefer working with crops", "I’m interested in animal research", "I’m not comfortable working with animals"],
-    answer: 0,
-    explanation: "This helps determine if you're suited for careers in animal husbandry, veterinary science, or crop-focused roles.",
+    options: [
+      "Yes, I love working with livestock",
+      "I prefer working with crops",
+      "I’m interested in animal research",
+      "I’m not comfortable working with animals",
+    ],
   },
   {
     question: "How do you approach problem-solving in agriculture?",
-    options: ["I prefer hands-on experimentation", "I rely on data and analysis", "I consult with experts and peers", "I use innovative and creative solutions"],
-    answer: 0,
-    explanation: "Your problem-solving approach can guide you toward roles in research, agribusiness, or innovation-focused careers.",
+    options: [
+      "I prefer hands-on experimentation",
+      "I rely on data and analysis",
+      "I consult with experts and peers",
+      "I use innovative and creative solutions",
+    ],
   },
   {
     question: "What motivates you the most in your career?",
-    options: ["Making a positive impact on the environment", "Achieving financial success", "Solving complex challenges", "Helping communities through agriculture"],
-    answer: 0,
-    explanation: "Your motivation can help identify if you're suited for sustainability, agribusiness, research, or community-focused roles.",
+    options: [
+      "Making a positive impact on the environment",
+      "Achieving financial success",
+      "Solving complex challenges",
+      "Helping communities through agriculture",
+    ],
   },
   {
     question: "How do you feel about managing people and resources?",
-    options: ["I enjoy leading teams and managing operations", "I prefer working independently", "I like collaborating with others but not managing", "I’m not interested in management roles"],
-    answer: 0,
-    explanation: "This helps determine if you're suited for leadership roles in farm management or agribusiness.",
+    options: [
+      "I enjoy leading teams and managing operations",
+      "I prefer working independently",
+      "I like collaborating with others but not managing",
+      "I’m not interested in management roles",
+    ],
   },
   {
     question: "What is your preferred scale of work?",
-    options: ["Small-scale, like organic farming", "Medium-scale, like managing a farm", "Large-scale, like agribusiness operations", "I’m open to any scale of work"],
-    answer: 0,
-    explanation: "Your preference for scale can guide you toward careers in organic farming, farm management, or agribusiness.",
+    options: [
+      "Small-scale, like organic farming",
+      "Medium-scale, like managing a farm",
+      "Large-scale, like agribusiness operations",
+      "I’m open to any scale of work",
+    ],
   },
   {
     question: "How do you feel about learning new skills in agriculture?",
-    options: ["I’m eager to learn and adapt", "I prefer sticking to what I know", "I enjoy learning but only when necessary", "I’m not very interested in learning new skills"],
-    answer: 0,
-    explanation: "This question helps determine if you're suited for dynamic roles in agritech or traditional farming.",
+    options: [
+      "I’m eager to learn and adapt",
+      "I prefer sticking to what I know",
+      "I enjoy learning but only when necessary",
+      "I’m not very interested in learning new skills",
+    ],
   },
   {
     question: "What is your level of interest in agricultural research?",
-    options: ["Very high, I want to contribute to new discoveries", "Moderate, I’m interested in applied research", "Low, I prefer practical work", "None, I’m not interested in research"],
-    answer: 0,
-    explanation: "Your interest in research can guide you toward careers in agricultural science or hands-on farming.",
+    options: [
+      "Very high, I want to contribute to new discoveries",
+      "Moderate, I’m interested in applied research",
+      "Low, I prefer practical work",
+      "None, I’m not interested in research",
+    ],
   },
   {
     question: "How do you feel about working in agribusiness?",
-    options: ["I’m very interested in managing agricultural trade", "I prefer working on the production side", "I’m interested in both production and business", "I’m not interested in agribusiness"],
-    answer: 0,
-    explanation: "This helps determine if you're suited for roles in agribusiness, farm management, or production-focused careers.",
+    options: [
+      "I’m very interested in managing agricultural trade",
+      "I prefer working on the production side",
+      "I’m interested in both production and business",
+      "I’m not interested in agribusiness",
+    ],
   },
   {
     question: "What is your preferred method of learning?",
-    options: ["Hands-on experience", "Reading and research", "Collaborating with others", "Using technology and tools"],
-    answer: 0,
-    explanation: "Your learning style can guide you toward careers in hands-on farming, research, or agritech development.",
-  }
+    options: [
+      "Hands-on experience",
+      "Reading and research",
+      "Collaborating with others",
+      "Using technology and tools",
+    ],
+  },
 ];
 
 
@@ -106,41 +151,43 @@ const AgricultureAssessment = () => {
     setSelectedAnswer(index);
   };
 
-  const handleNextQuestion = async () => {
-    const updatedAnswers = [
-      ...answers,
-      agricultureQuestions[currentQuestion].options[selectedAnswer],
-    ];
-    setAnswers(updatedAnswers);
+ const handleNextQuestion = async () => {
+  const updatedAnswers = [
+    ...answers,
+    agricultureQuestions[currentQuestion].options[selectedAnswer],
+  ];
+  setAnswers(updatedAnswers);
 
-    if (currentQuestion < agricultureQuestions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setSelectedAnswer(null);
-    } else {
-      try {
-        setIsSubmitting(true);
+  if (currentQuestion < agricultureQuestions.length - 1) {
+    setCurrentQuestion(currentQuestion + 1);
+    setSelectedAnswer(null);
+  } else {
+    try {
+      const response = await fetch("http://localhost:8080/api/assessment/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "agriculture", // or "technical" if you're using that version
+          answers: updatedAnswers,
+        }),
+      });
 
-        const response = await fetch(
-          "http://localhost:8080/api/assessment/analyze",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedAnswers),
-          }
-        );
-
-        const result = await response.json();
-        navigate("/careerpathpage", { state: { careerPaths: result } });
-      } catch (error) {
-        console.error("Error fetching career path:", error);
-        alert("Something went wrong! Please try again.");
-      } finally {
-        setIsSubmitting(false);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server responded with ${response.status}: ${errorText}`);
       }
+
+      const result = await response.json();
+      navigate("/careerpathpage", { state: { careerPaths: result } });
+    } catch (error) {
+      console.error("Error fetching career path:", error);
+      alert("Something went wrong! Please try again.");
     }
-  };
+  }
+};
+
 
   // ✅ Enhanced progress bar calculation
   const progressPercent = Math.round(

@@ -15,10 +15,13 @@ import AdministrativeAssesment from "./assessment/AdministrativeAssesment";
 import CarrerPathDetails from "./components/CarrerPathDetail";
 import SelectedCarrerPath from "./components/SelectedCarrerPath";
 import SelectedDetailedInfo from "./components/SelectedDetailedInfo";
+import { AnimatePresence } from "framer-motion";
 
 const App = () => {
   return (
-    <GoogleOAuthProvider clientId="1037825352287-5kabpoiujd5skjckrvna25qjdsv5evrj.apps.googleusercontent.com">
+     <AnimatePresence mode="wait">
+
+      <GoogleOAuthProvider clientId="1037825352287-5kabpoiujd5skjckrvna25qjdsv5evrj.apps.googleusercontent.com">
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -38,6 +41,8 @@ const App = () => {
         </Routes>
       </Router>
     </GoogleOAuthProvider>
+     </AnimatePresence>
+    
   );
 };
 

@@ -79,10 +79,10 @@ const CareerPathPage = () => {
         {/* ✅ Back Button */}
         <div className="text-center mt-10">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/CarrerSelection")}
             className="px-6 py-3 bg-gray-600 text-white rounded-md shadow hover:bg-gray-700 transition"
           >
-            Back to Home
+            Take Assesment 
           </button>
         </div>
       </div>
