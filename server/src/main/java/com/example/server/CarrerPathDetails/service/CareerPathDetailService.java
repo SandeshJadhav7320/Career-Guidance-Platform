@@ -27,6 +27,7 @@ public class CareerPathDetailService {
             - Free and paid resources (courses, platforms) with there suggested links
             - Career growth opportunities
             - Real-world projects to practice
+            - Available jobs 
             - Communities to join
 
             Respond in markdown format.
@@ -46,7 +47,8 @@ public class CareerPathDetailService {
         headers.set("X-Title", "Career Roadmap Generator");
 
         Map<String, Object> body = new HashMap<>();
-        body.put("model", "openai/gpt-3.5-turbo-0613"); // Use supported model
+        body.put("model", "mistralai/mistral-7b-instruct"); // ✅ Cheaper/free
+        body.put("max_tokens", 800); // Use supported model
         body.put("messages", List.of(
                 Map.of("role", "user", "content", prompt)
         ));
