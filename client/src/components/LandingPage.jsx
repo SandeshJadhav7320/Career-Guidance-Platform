@@ -104,6 +104,7 @@ const LandingPage = () => {
                   "Discover Your Perfect Career Path with AI",
                   "Discover roadmap  ",
                   "Shape Your Future Smartly with AI",
+                  "Connect with Mentors"
                 ],
                 autoStart: true,
                 loop: true,
