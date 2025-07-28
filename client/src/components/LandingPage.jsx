@@ -1,37 +1,24 @@
 import React, { useEffect } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
-import heroImage from "../assets/filehero.png";
 import { googleAuth } from "../api";
-import {
-  FaFacebook,
-  FaTwitter,
-  FaLinkedin,
-  FaInstagram,
-  FaQuestionCircle,
-  FaBrain,
-  FaUsers,
-  FaSignInAlt,
-} from "react-icons/fa";
-import careerSymbol from "../assets/career-symbol.png";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import Typewriter from "typewriter-effect";
+
+const API_BASE = import.meta.env.VITE_API_URL;
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = localStorage.getItem("user-info");
-    if (user) {
-      navigate("/dashboard");
-    }
+    if (user) navigate("/dashboard");
   }, [navigate]);
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
         const accessToken = tokenResponse.access_token;
-        const res = await fetch("${API_BASE}/oauth2/v3/userinfo", {
+
+        const res = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
         const profile = await res.json();
@@ -237,3 +224,5 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
+
