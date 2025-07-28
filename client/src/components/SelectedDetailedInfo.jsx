@@ -10,7 +10,7 @@ function SelectedDetailedInfo() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/get-career-path-by-id?id=${id}`)
+    fetch(`${API_BASE}/api/get-career-path-by-id?id=${id}`)
 
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch career path.");

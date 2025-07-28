@@ -180,7 +180,7 @@ const AdministrativeAssesment = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:8080/api/assessment/analyze",
+          "${API_BASE}/api/assessment/analyze",
           {
             method: "POST",
             headers: {

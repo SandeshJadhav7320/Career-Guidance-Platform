@@ -38,7 +38,7 @@ function SelectedCareerPath() {
     return;
   }
 
-  fetch(`http://localhost:8080/api/get-career-path?userId=${userId}`)
+  fetch(`${API_BASE}/api/get-career-path?userId=${userId}`)
     .then((res) => {
       if (!res.ok) throw new Error("Failed to fetch saved career paths.");
       return res.json();

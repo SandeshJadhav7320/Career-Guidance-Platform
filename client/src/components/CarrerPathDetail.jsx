@@ -30,7 +30,7 @@ const CareerPathDetail = () => {
   useEffect(() => {
     if (title) {
       setLoading(true);
-      fetch("http://localhost:8080/api/title", {
+      fetch("${API_BASE}/api/title", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +135,7 @@ const CareerPathDetail = () => {
       ...sections,
     };
 
-    fetch("http://localhost:8080/api/save-career-path", {
+    fetch("${API_BASE}/api/save-career-path", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
