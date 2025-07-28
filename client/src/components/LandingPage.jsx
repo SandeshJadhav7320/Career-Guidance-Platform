@@ -1,7 +1,21 @@
 import React, { useEffect } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
+import heroImage from "../assets/filehero.png";
 import { googleAuth } from "../api";
+import {
+  FaFacebook,
+  FaTwitter,
+  FaLinkedin,
+  FaInstagram,
+  FaQuestionCircle,
+  FaBrain,
+  FaUsers,
+  FaSignInAlt,
+} from "react-icons/fa";
+import careerSymbol from "../assets/career-symbol.png";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import Typewriter from "typewriter-effect";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
