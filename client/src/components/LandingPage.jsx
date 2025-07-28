@@ -31,7 +31,7 @@ const LandingPage = () => {
     onSuccess: async (tokenResponse) => {
       try {
         const accessToken = tokenResponse.access_token;
-        const res = await fetch("${API_BASE}}oauth2/v3/userinfo", {
+        const res = await fetch("${API_BASE}/oauth2/v3/userinfo", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
         const profile = await res.json();
