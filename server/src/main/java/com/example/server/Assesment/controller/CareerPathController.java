@@ -14,7 +14,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/assessment")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {
+	    "http://localhost:5173",
+	    "https://career-guidance-platform.vercel.app"
+	})
 public class CareerPathController {
 
     @Autowired

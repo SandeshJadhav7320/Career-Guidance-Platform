@@ -229,22 +229,26 @@ const TechnicalAssessment = () => {
       setSelectedAnswer(null);
     } else {
       try {
-        const response = await fetch(
-          `${API_BASE}/api/assessment/analyze`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              answers: updatedAnswers,
-              type: "technical",
-            }),
-          }
-        );
+        const response = await fetch(`${API_BASE}/api/assessment/analyze`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    answers: updatedAnswers,
+    type: "technical",
+  }),
+});
 
-        const result = await response.json();
-        navigate("/careerpathpage", { state: { careerPaths: result } });
+// 🔧 Check if request failed
+if (!response.ok) {
+  const errorText = await response.text(); // backend might return HTML error
+  throw new Error(`API error (${response.status}): ${errorText}`);
+}
+
+const result = await response.json();
+navigate("/careerpathpage", { state: { careerPaths: result } });
+
       } catch (error) {
         console.error("Error fetching career path:", error);
         alert("Something went wrong! Please try again.");
