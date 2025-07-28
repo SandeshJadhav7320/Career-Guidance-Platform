@@ -2,7 +2,7 @@ const API_BASE = import.meta.env.VITE_API_URL;
 
 export const googleAuth = async (userData) => {
   try {
-    const response = await fetch(`${API_BASE}/api/auth/google-login`, {
+    const response = await fetch(`https://career-guidance-platform.onrender.com/api/auth/google-login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
