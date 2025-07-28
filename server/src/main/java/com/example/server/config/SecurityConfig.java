@@ -2,6 +2,7 @@ package com.example.server.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,6 +21,7 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight support
                 .requestMatchers(
                     "/api/auth/google-login",
                     "/api/assessment/analyze",
@@ -38,7 +40,7 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173","https://career-guidance-platform.vercel.app")); // or your frontend origin
+        config.setAllowedOriginPatterns(List.of("*")); // use "*" temporarily
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
