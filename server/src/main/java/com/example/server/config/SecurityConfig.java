@@ -17,46 +17,29 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    	http
-        .csrf().disable()
-        .cors().configurationSource(corsConfigurationSource()) // ⬅️ use correct source here
-        .and()
-        .authorizeHttpRequests()
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/assessment/analyze").permitAll()
-            .requestMatchers(
-                "/api/auth/google-login",
-                "/api/title",
-                "/api/save-career-path",
-                "/api/get-career-path",
-                "/api/get-career-path-by-id"
-            ).permitAll()
-            .anyRequest().authenticated()
-        .and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+        http
+            .csrf().disable()
+            .cors().and()
+            .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/api/**").permitAll() // ✅ open all /api routes
+                .anyRequest().authenticated()
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         return http.build();
     }
 
     @Bean
-    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+    public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-            "http://localhost:5173",
-            "https://career-guidance-platform.vercel.app"
-        ));
+        config.setAllowedOriginPatterns(List.of("*")); // ✅ wildcard for CORS
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        return source;
+        return new CorsFilter(source);
     }
-
-
 }
-
-
