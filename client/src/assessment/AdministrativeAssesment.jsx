@@ -180,7 +180,7 @@ const AdministrativeAssesment = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "${API_BASE}/api/assessment/analyze",
+          "https://career-guidance-platform.onrender.com/api/assessment/analyze",
           {
             method: "POST",
             headers: {

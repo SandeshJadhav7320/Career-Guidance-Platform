@@ -182,7 +182,7 @@ const BankingAssesment = () => {
   setIsLoading(true); // Start loader
 
   try {
-    const response = await fetch("${API_BASE}/api/assessment/analyze", {
+    const response = await fetch("https://career-guidance-platform.onrender.com/api/assessment/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

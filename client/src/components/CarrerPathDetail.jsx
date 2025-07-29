@@ -30,7 +30,7 @@ const CareerPathDetail = () => {
   useEffect(() => {
     if (title) {
       setLoading(true);
-      fetch("${API_BASE}/api/title", {
+      fetch("https://career-guidance-platform.onrender.com/api/title", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +135,7 @@ const CareerPathDetail = () => {
       ...sections,
     };
 
-    fetch("${API_BASE}/api/save-career-path", {
+    fetch("https://career-guidance-platform.onrender.com/api/save-career-path", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

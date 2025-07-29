@@ -38,7 +38,7 @@ function SelectedCareerPath() {
     return;
   }
 
-  fetch(`${API_BASE}/api/get-career-path?userId=${userId}`)
+  fetch(`https://career-guidance-platform.onrender.com/api/get-career-path?userId=${userId}`)
     .then((res) => {
       if (!res.ok) throw new Error("Failed to fetch saved career paths.");
       return res.json();

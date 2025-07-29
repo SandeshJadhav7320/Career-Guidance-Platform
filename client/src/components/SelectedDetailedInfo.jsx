@@ -10,7 +10,7 @@ function SelectedDetailedInfo() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/get-career-path-by-id?id=${id}`)
+    fetch(`https://career-guidance-platform.onrender.com/api/get-career-path-by-id?id=${id}`)
 
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch career path.");
