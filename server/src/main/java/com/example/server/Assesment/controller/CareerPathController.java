@@ -8,28 +8,27 @@ import com.example.server.Assesment.DTO.AssessmentRequest;
 import org.springframework.http.ResponseEntity;
 import com.example.server.CareerPath.model.CareerPath;
 
-
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/assessment")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "https://career-guidance-platform.vercel.app"
+})
 public class CareerPathController {
 
     @Autowired
     private OpenAIService openAIService;
     
     @Autowired
-    private CareerPathService careerPathService;  // ✅ NEW: inject it	
+    private CareerPathService careerPathService;
 
     @PostMapping("/analyze")
     public ResponseEntity<List<Map<String, Object>>> analyzeAnswers(@RequestBody AssessmentRequest request) {
-    	
-    	// 1. Get AI-generated paths
         List<Map<String, Object>> result = openAIService.getCareerPath(request.getAnswers(), request.getType());
-        
-     // 2. Convert each path to CareerPath entity
+
         List<CareerPath> pathsToSave = result.stream().map(path -> {
             CareerPath cp = new CareerPath();
             cp.setTitle(path.get("title").toString());
@@ -38,11 +37,7 @@ public class CareerPathController {
             return cp;
         }).toList();
 
-        // 3. Save to DB
         careerPathService.saveCareerPaths(pathsToSave);
         return ResponseEntity.ok(result);
     }
 }
-
-
-
