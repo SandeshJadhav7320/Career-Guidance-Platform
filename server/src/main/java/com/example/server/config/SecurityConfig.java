@@ -23,9 +23,9 @@ public class SecurityConfig {
         .and()
         .authorizeHttpRequests()
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/assessment/analyze").permitAll()
             .requestMatchers(
                 "/api/auth/google-login",
-                "/api/assessment/analyze",
                 "/api/title",
                 "/api/save-career-path",
                 "/api/get-career-path",
