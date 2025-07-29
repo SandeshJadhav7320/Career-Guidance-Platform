@@ -17,28 +17,30 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable()
-            .cors().and()
-            .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight support
-                .requestMatchers(
-                    "/api/auth/google-login",
-                    "/api/assessment/analyze",
-                    "/api/title",
-                    "/api/save-career-path",
-                    "/api/get-career-path",
-                    "/api/get-career-path-by-id"
-                ).permitAll()
-                .anyRequest().authenticated()
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    	http
+        .csrf().disable()
+        .cors().configurationSource(corsConfigurationSource()) // ⬅️ use correct source here
+        .and()
+        .authorizeHttpRequests()
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers(
+                "/api/auth/google-login",
+                "/api/assessment/analyze",
+                "/api/title",
+                "/api/save-career-path",
+                "/api/get-career-path",
+                "/api/get-career-path-by-id"
+            ).permitAll()
+            .anyRequest().authenticated()
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
 
         return http.build();
     }
 
     @Bean
-    public CorsFilter corsFilter() {
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
             "http://localhost:5173",
@@ -50,7 +52,10 @@ public class SecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        return source;
     }
 
+
 }
+
+

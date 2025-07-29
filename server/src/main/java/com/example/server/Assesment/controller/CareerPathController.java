@@ -46,3 +46,6 @@ public class CareerPathController {
         return ResponseEntity.ok(result);
     }
 }
+
+
+
