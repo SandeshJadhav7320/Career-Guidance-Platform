@@ -16,7 +16,7 @@ public class CareerPathDetailService {
     public String getCareerDetails(String title) {
         String prompt = """
             You are a professional career coach.
-            Provide a detailed roadmap for becoming a """ + title + """
+            Give me a detailed roadmap for becoming a """ + title + """
             
             Include:
             - Overview
@@ -47,8 +47,8 @@ public class CareerPathDetailService {
         headers.set("X-Title", "Career Roadmap Generator");
 
         Map<String, Object> body = new HashMap<>();
-        body.put("model", "mistralai/mistral-7b-instruct"); // ✅ Cheaper/free
-        body.put("max_tokens", 800); // Use supported model
+        body.put("model", "openai/gpt-3.5-turbo"); // ✅ Cheaper/free
+        body.put("max_tokens", 1000); // Use supported model
         body.put("messages", List.of(
                 Map.of("role", "user", "content", prompt)
         ));
