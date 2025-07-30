@@ -7,7 +7,8 @@ import {
   BookOpen,
   Star,
   Code,
-  ListChecks
+  ListChecks,Briefcase,  // ← ADD THIS
+  Users  
 } from "lucide-react";
 import { motion } from "framer-motion";
 

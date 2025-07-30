@@ -11,7 +11,6 @@ function SelectedDetailedInfo() {
 
   useEffect(() => {
     fetch(`https://career-guidance-platform.onrender.com/api/get-career-path-by-id?id=${id}`)
-
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch career path.");
         return res.json();
@@ -45,7 +44,6 @@ function SelectedDetailedInfo() {
       <div className="p-6 md:p-12 bg-gray-50 min-h-screen">
         <h1 className="text-3xl font-bold text-blue-700 mb-6">{career.title}</h1>
         <div className="space-y-6 text-base leading-relaxed text-gray-800">
-
           <div><strong>Overview:</strong> {renderMarkdown(career.overview)}</div>
           <div><strong>Required Skills:</strong> {renderMarkdown(career.requiredSkills)}</div>
           <div><strong>Educational Path:</strong> {renderMarkdown(career.educationalPath)}</div>
@@ -55,7 +53,6 @@ function SelectedDetailedInfo() {
           <div><strong>Resources:</strong> {renderMarkdown(career.resources)}</div>
           <div><strong>Projects:</strong> {renderMarkdown(career.projects)}</div>
           <div><strong>Communities:</strong> {renderMarkdown(career.communities)}</div>
-
         </div>
       </div>
     </>
