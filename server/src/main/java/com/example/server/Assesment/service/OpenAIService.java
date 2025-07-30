@@ -70,7 +70,8 @@ public class OpenAIService {
         headers.setBearerAuth(apiKey.trim());
 
         // ✅ FIX: Use actual frontend domain in referer
-        headers.set("HTTP-Referer", "https://career-guidance-platform.vercel.app");
+        headers.set("Referer", "https://career-guidance-platform.vercel.app");
+
         headers.set("X-Title", "Career Guidance Platform");
 
         Map<String, Object> body = new HashMap<>();
@@ -103,3 +104,6 @@ public class OpenAIService {
         }
     }
 }
+
+
+
