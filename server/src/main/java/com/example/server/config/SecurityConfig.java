@@ -24,7 +24,14 @@ public class SecurityConfig {
 	      .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 	      .authorizeHttpRequests(auth -> auth
 	         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-	         .requestMatchers("/api/**").permitAll()
+	         .requestMatchers(
+	                    "/api/auth/google-login",
+	                    "/api/assessment/analyze",
+	                    "/api/title",
+	                    "/api/save-career-path",
+	                    "/api/get-career-path",
+	                    "/api/get-career-path-by-id"
+	                ).permitAll()
 	         .anyRequest().authenticated()
 	      )
 	      .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
