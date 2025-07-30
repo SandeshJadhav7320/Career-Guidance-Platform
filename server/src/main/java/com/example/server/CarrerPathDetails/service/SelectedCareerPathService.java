@@ -18,7 +18,7 @@ public class SelectedCareerPathService {
         return repository.save(path);
     }
 
-    public List<SelectedCareerPath> getPathsByUser(String userId) {
+    public List<SelectedCareerPath> getPathsByUser(Long userId) {
         return repository.findByUserId(userId);
     }
     public Optional<SelectedCareerPath> getPathById(Long id) {

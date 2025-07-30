@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dashboard_Navbar from "../Dashboard_Components/Dashboard_Navbar";
 
-// Helper to extract userId from localStorage
 function getUserIdFromLocalStorage() {
   let userId = localStorage.getItem("user-id");
 
@@ -31,29 +30,30 @@ function SelectedCareerPath() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userId = getUserIdFromLocalStorage();
+  const userId = getUserIdFromLocalStorage(); // should be "3"
 
-    if (!userId) {
-      setError("User not logged in.");
+  if (!userId) {
+    setError("User not logged in.");
+    setLoading(false);
+    return;
+  }
+
+  fetch(`https://career-guidance-platform.onrender.com/api/get-career-path?userId=${userId}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to fetch saved career paths.");
+      return res.json();
+    })
+    .then((data) => {
+      setCareerPaths(data);  // ← Must be an array
       setLoading(false);
-      return;
-    }
+    })
+    .catch((err) => {
+      console.error("❌ Error fetching career paths:", err);
+      setError(err.message || "Something went wrong.");
+      setLoading(false);
+    });
+}, []);
 
-    fetch(`https://career-guidance-platform.onrender.com/api/get-career-path?userId=${userId}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch saved career paths.");
-        return res.json();
-      })
-      .then((data) => {
-        setCareerPaths(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("❌ Error fetching career paths:", err);
-        setError(err.message || "Something went wrong.");
-        setLoading(false);
-      });
-  }, []);
 
   return (
     <>
@@ -79,8 +79,8 @@ function SelectedCareerPath() {
               <h2 className="text-xl font-bold text-blue-700 mb-2">
                 {career.title || "Untitled Career Path"}
               </h2>
-              <p className="text-gray-500 italic mb-4">
-                Saved career path. Click below to view details.
+              <p className="text-gray-700 whitespace-pre-line line-clamp-4 mb-4">
+                {career.overview || "No overview available."}
               </p>
               <button
                 onClick={() => navigate(`/career-detail/${career.id}`)}

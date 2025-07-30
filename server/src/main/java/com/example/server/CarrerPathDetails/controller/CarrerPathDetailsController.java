@@ -46,8 +46,14 @@ public class CarrerPathDetailsController {
             return ResponseEntity.badRequest().body("Missing userId.");
         }
 
-        return ResponseEntity.ok(selectedCareerPathService.getPathsByUser(userId));
+        try {
+            Long longUserId = Long.parseLong(userId); // 🔁 Convert String to Long
+            return ResponseEntity.ok(selectedCareerPathService.getPathsByUser(longUserId));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid userId format.");
+        }
     }
+
     @GetMapping("/get-career-path-by-id")
     public ResponseEntity<SelectedCareerPath> getCareerPathById(@RequestParam Long id) {
         Optional<SelectedCareerPath> path = selectedCareerPathService.getPathById(id);
