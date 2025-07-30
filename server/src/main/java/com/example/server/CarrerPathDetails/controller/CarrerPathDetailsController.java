@@ -12,7 +12,7 @@ import com.example.server.CarrerPathDetails.service.SelectedCareerPathService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173") // Allow frontend access
+@CrossOrigin(origins = {"http://localhost:5173", "https://career-guidance-platform.vercel.app"})
 public class CarrerPathDetailsController {
 
     @Autowired
