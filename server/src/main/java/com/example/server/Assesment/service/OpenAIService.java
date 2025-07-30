@@ -75,7 +75,7 @@ public class OpenAIService {
         headers.set("X-Title", "Career Guidance Platform");
 
         Map<String, Object> body = new HashMap<>();
-        body.put("model", "gryphe/mythomist-7b"); // or any supported model
+        body.put("model", "mistralai/mistral-7b-instruct"); // or any supported model
         body.put("max_tokens", 1000);
         body.put("messages", List.of(
             Map.of("role", "user", "content", prompt)
