@@ -21,3 +21,5 @@ public class AssessmentRequest {
         this.type = type;
     }
 }
+
+
