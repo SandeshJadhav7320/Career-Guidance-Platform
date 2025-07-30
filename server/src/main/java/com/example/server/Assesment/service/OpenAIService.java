@@ -75,7 +75,7 @@ public class OpenAIService {
         headers.set("X-Title", "Career Guidance Platform");
 
         Map<String, Object> body = new HashMap<>();
-        body.put("model", "openai/gpt-3.5-turbo");
+        body.put("model", "mistralai/mixtral-8x7b"); // or any supported model
         body.put("max_tokens", 1000);
         body.put("messages", List.of(
             Map.of("role", "user", "content", prompt)
