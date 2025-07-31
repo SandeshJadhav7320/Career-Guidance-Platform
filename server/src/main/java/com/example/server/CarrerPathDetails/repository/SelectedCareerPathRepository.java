@@ -6,5 +6,5 @@ import com.example.server.CarrerPathDetails.model.SelectedCareerPath;
 import java.util.List;
 
 public interface SelectedCareerPathRepository extends JpaRepository<SelectedCareerPath, Long> {
-    List<SelectedCareerPath> findByUserId(Long userId);
+    List<SelectedCareerPath> findByUserId(String userId);
 }
