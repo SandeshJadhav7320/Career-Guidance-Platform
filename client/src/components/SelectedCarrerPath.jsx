@@ -3,25 +3,18 @@ import { useNavigate } from "react-router-dom";
 import Dashboard_Navbar from "../Dashboard_Components/Dashboard_Navbar";
 
 function getUserIdFromLocalStorage() {
-  let userId = localStorage.getItem("user-id");
-
-  if (!userId || userId === "null" || userId === "undefined") {
-    const userInfoStr = localStorage.getItem("user-info");
-    if (userInfoStr) {
-      try {
-        const userInfo = JSON.parse(userInfoStr);
-        userId = userInfo?.id?.toString();
-        if (userId) {
-          localStorage.setItem("user-id", userId);
-        }
-      } catch (err) {
-        console.error("❌ Failed to parse user-info JSON:", err);
-      }
+  const userInfoStr = localStorage.getItem("user-info");
+  if (userInfoStr) {
+    try {
+      const userInfo = JSON.parse(userInfoStr);
+      return userInfo?.id?.toString(); // ✅ Always get correct logged-in user ID
+    } catch (err) {
+      console.error("❌ Failed to parse user-info JSON:", err);
     }
   }
-
-  return userId;
+  return null;
 }
+
 
 function SelectedCareerPath() {
   const [careerPaths, setCareerPaths] = useState([]);

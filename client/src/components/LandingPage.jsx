@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
-import heroImage from "../assets/filehero.png";
+import dashboardImage from "../assets/dashboardimage.png";
 import { googleAuth } from "../api";
 import {
   FaFacebook,
@@ -133,13 +133,12 @@ const LandingPage = () => {
           transition={{ duration: 1 }}
         >
           <motion.img
-            src={heroImage}
-            alt="AI Career Guidance"
-            className="w-full h-auto rounded-md shadow-xl"
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.2 }}
-          />
+                        src={dashboardImage}
+                        alt="AI Career Guidance"
+                        className="w-full max-w-md h-auto object-contain rounded-lg bg-gray-100 shadow-md"
+                        animate={{ y: [10, -10, 0] }}
+                        transition={{ duration: 5, repeat: Infinity }}
+                      />
         </motion.div>
       </motion.section>
 
