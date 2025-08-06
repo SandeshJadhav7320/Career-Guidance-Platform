@@ -28,7 +28,8 @@ public class SecurityConfig {
                     "/api/title",
                     "/api/save-career-path",
                     "/api/get-career-path",
-                    "/api/get-career-path-by-id"
+                    "/api/get-career-path-by-id",
+                    "/api/users/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
