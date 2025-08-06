@@ -1,8 +1,9 @@
 package com.example.server.ProfileData.controller;
 
 import com.example.server.ProfileData.model.User;
-import com.example.server.ProfileData.service.UserService;
+import com.example.server.ProfileData.service.ProfileDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*") // Allow frontend access
@@ -10,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+    @Qualifier("profileDataService")
+    private ProfileDataService userService;
 
     @GetMapping("/{email}")
     public User getUser(@PathVariable String email) {
