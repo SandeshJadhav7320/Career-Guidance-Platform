@@ -13,15 +13,15 @@ public class UserController {
 
 	@Autowired
     @Qualifier("profileDataService")
-    private ProfileDataService userService;
+    private ProfileDataService profileService;
 
     @GetMapping("/{email}")
     public User getUser(@PathVariable String email) {
-        return userService.getUserByEmail(email);
+        return profileService.getUserByEmail(email);
     }
 
     @PostMapping
     public User saveOrUpdateUser(@RequestBody User user) {
-        return userService.saveOrUpdateUser(user);
+        return profileService.saveOrUpdateUser(user);
     }
 }
