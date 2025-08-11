@@ -1,6 +1,6 @@
 package com.example.server.ProfileData.controller;
 
-import com.example.server.ProfileData.model.User;
+import com.example.server.ProfileData.model.ProfleDataModel;
 import com.example.server.ProfileData.service.ProfileDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,12 +16,12 @@ public class UserController {
     private ProfileDataService profileService;
 
     @GetMapping("/{email}")
-    public User getUser(@PathVariable String email) {
+    public ProfleDataModel getUser(@PathVariable String email) {
         return profileService.getUserByEmail(email);
     }
 
     @PostMapping
-    public User saveOrUpdateUser(@RequestBody User user) {
+    public ProfleDataModel saveOrUpdateUser(@RequestBody ProfleDataModel user) {
         return profileService.saveOrUpdateUser(user);
     }
 }

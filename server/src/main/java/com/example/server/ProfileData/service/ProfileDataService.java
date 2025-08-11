@@ -1,7 +1,7 @@
 package com.example.server.ProfileData.service;
 
-import com.example.server.ProfileData.model.User;
-import com.example.server.ProfileData.repository.UserRepository;
+import com.example.server.ProfileData.model.ProfleDataModel;
+import com.example.server.ProfileData.repository.ProfileDataRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +12,17 @@ import java.util.Optional;
 public class ProfileDataService {
 
     @Autowired
-    private UserRepository userRepository;
+    private ProfileDataRepo userRepository;
 
-    public User getUserByEmail(String email) {
+    public ProfleDataModel getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
 
-    public User saveOrUpdateUser(User user) {
-        Optional<User> existing = userRepository.findByEmail(user.getEmail());
+    public ProfleDataModel saveOrUpdateUser(ProfleDataModel user) {
+        Optional<ProfleDataModel> existing = userRepository.findByEmail(user.getEmail());
 
         if (existing.isPresent()) {
-            User updateUser = existing.get();
+        	ProfleDataModel updateUser = existing.get();
             updateUser.setName(user.getName());
             updateUser.setBio(user.getBio());
             updateUser.setAvatar(user.getAvatar());
