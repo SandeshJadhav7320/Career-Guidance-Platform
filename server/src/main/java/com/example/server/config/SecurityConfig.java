@@ -21,18 +21,20 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(
-                    "/api/auth/google-login",
-                    "/api/assessment/analyze",
-                    "/api/title",
-                    "/api/save-career-path",
-                    "/api/get-career-path",
-                    "/api/get-career-path-by-id",
-                    "/api/users/**"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
+            	    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            	    .requestMatchers(
+            	        "/api/auth/google-login",
+            	        "/api/assessment/analyze",
+            	        "/api/title",
+            	        "/api/save-career-path",
+            	        "/api/get-career-path",
+            	        "/api/get-career-path-by-id",
+            	        "/api/users",       // ✅ allow exact path
+            	        "/api/users/**"     // ✅ allow any subpath
+            	    ).permitAll()
+            	    .anyRequest().authenticated()
+            	)
+
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
