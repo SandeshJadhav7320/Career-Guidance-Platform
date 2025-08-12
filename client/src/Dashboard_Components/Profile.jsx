@@ -24,24 +24,31 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user-info");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        setFormData(parsedUser);
-      } catch (error) {
-        console.error("Error parsing user info:", error);
-      }
+  const storedUser = localStorage.getItem("user-info");
+  if (storedUser) {
+    try {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      setFormData(parsedUser);
+
+      // Fetch updated user from backend
+      fetch(`https://career-guidance-platform.onrender.com/api/users/${parsedUser.email}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data) {
+            setUser(data);
+            setFormData(data);
+            localStorage.setItem("user-info", JSON.stringify(data));
+          }
+        })
+        .catch(err => console.error("Error fetching user:", err));
+
+    } catch (error) {
+      console.error("Error parsing user info:", error);
     }
+  }
+}, [navigate]);
 
-    const handleBackNavigation = () => {
-      navigate("/", { replace: true });
-    };
-
-    window.addEventListener("popstate", handleBackNavigation);
-    return () => window.removeEventListener("popstate", handleBackNavigation);
-  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("user-info");
@@ -53,6 +60,7 @@ const Profile = () => {
       ...prev,
       [e.target.name]: e.target.value
     }));
+    
   };
 
   const handleAvatarUpload = (e) => {
@@ -69,12 +77,34 @@ const Profile = () => {
     }
   };
 
-  const handleSaveChanges = () => {
-    const updatedUser = { ...formData };
-    setUser(updatedUser);
-    localStorage.setItem("user-info", JSON.stringify(updatedUser));
+  const handleSaveChanges = async () => {
+  try {
+    // Ensure email is included
+    const updatedData = { ...formData, email: user.email };
+
+    const response = await fetch("https://career-guidance-platform.onrender.com/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const savedUser = await response.json();
+
+    // Update UI and local storage
+    setUser(savedUser);
+    localStorage.setItem("user-info", JSON.stringify(savedUser));
+
     setEditModal(false);
-  };
+  } catch (error) {
+    console.error("Error saving user:", error);
+    alert("Failed to save changes. Please try again.");
+  }
+};
+
 
   if (!user) {
     return (
