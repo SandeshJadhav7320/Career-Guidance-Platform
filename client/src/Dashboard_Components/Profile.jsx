@@ -23,7 +23,7 @@ const Profile = () => {
     portfolio: ""
   });
 
-  useEffect(() => {
+useEffect(() => {
   const storedUser = localStorage.getItem("user-info");
   if (storedUser) {
     try {
@@ -31,9 +31,15 @@ const Profile = () => {
       setUser(parsedUser);
       setFormData(parsedUser);
 
-      // Fetch updated user from backend
       fetch(`https://career-guidance-platform.onrender.com/api/users/${parsedUser.email}`)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) {
+            // Don't parse empty body
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          return res.text(); // read raw text first
+        })
+        .then(text => text ? JSON.parse(text) : null) // only parse JSON if not empty
         .then(data => {
           if (data) {
             setUser(data);
@@ -42,12 +48,12 @@ const Profile = () => {
           }
         })
         .catch(err => console.error("Error fetching user:", err));
-
     } catch (error) {
       console.error("Error parsing user info:", error);
     }
   }
 }, [navigate]);
+
 
 
   const handleLogout = () => {
@@ -77,33 +83,40 @@ const Profile = () => {
     }
   };
 
-  const handleSaveChanges = async () => {
-  try {
-    // Ensure email is included
-    const updatedData = { ...formData, email: user.email };
+const handleSaveChanges = async () => {
+  if (!user?.email) {
+    alert("Email not loaded yet. Please try again.");
+    return;
+  }
 
+  const updatedData = {
+    email: user.email, // required for backend update
+    name: formData.name,
+    bio: formData.bio,
+    education: formData.education,
+    portfolio: formData.portfolio
+  };
+
+  try {
     const response = await fetch("https://career-guidance-platform.onrender.com/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedData),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const savedUser = await response.json();
-
-    // Update UI and local storage
     setUser(savedUser);
     localStorage.setItem("user-info", JSON.stringify(savedUser));
-
     setEditModal(false);
   } catch (error) {
     console.error("Error saving user:", error);
     alert("Failed to save changes. Please try again.");
   }
 };
+
+
 
 
   if (!user) {
@@ -221,10 +234,10 @@ const Profile = () => {
           <div className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-lg space-y-4 animate-fade-in">
             <h2 className="text-xl font-bold text-gray-800">Edit Your Info</h2>
             <div className="grid grid-cols-1 gap-4">
-              <input name="name" value={formData.name} onChange={handleChange} className="px-3 py-2 border rounded-md" placeholder="Full Name" />
-              <textarea name="bio" value={formData.bio} onChange={handleChange} className="px-3 py-2 border rounded-md" placeholder="Short Bio" />
-              <input name="education" value={formData.education} onChange={handleChange} className="px-3 py-2 border rounded-md" placeholder="Education" />
-              <input name="portfolio" value={formData.portfolio} onChange={handleChange} className="px-3 py-2 border rounded-md" placeholder="Portfolio / LinkedIn URL" />
+              <input name="name" value={formData.name || ""} onChange={handleChange} className="px-3 py-2 border rounded-md" placeholder="Full Name" />
+              <textarea name="bio" value={formData.bio || ""} onChange={handleChange} className="px-3 py-2 border rounded-md" placeholder="Short Bio" />
+              <input name="education" value={formData.education || ""} onChange={handleChange} className="px-3 py-2 border rounded-md" placeholder="Education" />
+              <input name="portfolio" value={formData.portfolio || ""} onChange={handleChange} className="px-3 py-2 border rounded-md" placeholder="Portfolio / LinkedIn URL" />
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <button
