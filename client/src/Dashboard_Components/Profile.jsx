@@ -23,38 +23,39 @@ const Profile = () => {
     portfolio: ""
   });
 
-useEffect(() => {
-  const storedUser = localStorage.getItem("user-info");
-  if (storedUser) {
-    try {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      setFormData(parsedUser);
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user-info");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setFormData(parsedUser);
 
-      fetch(`https://career-guidance-platform.onrender.com/api/users/${parsedUser.email}`)
-        .then(res => {
-          if (!res.ok) {
-            // Don't parse empty body
-            throw new Error(`HTTP error! Status: ${res.status}`);
-          }
-          return res.text(); // read raw text first
-        })
-        .then(text => text ? JSON.parse(text) : null) // only parse JSON if not empty
-        .then(data => {
-          if (data) {
-            setUser(data);
-            setFormData(data);
-            localStorage.setItem("user-info", JSON.stringify(data));
-          }
-        })
-        .catch(err => console.error("Error fetching user:", err));
-    } catch (error) {
-      console.error("Error parsing user info:", error);
+        fetch(`https://career-guidance-platform.onrender.com/api/users/${parsedUser.email}`)
+          .then(res => {
+            if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+            return res.text();
+          })
+          .then(text => (text ? JSON.parse(text) : null))
+          .then(data => {
+            if (data) {
+              // ✅ merge, keep original id & googleId
+              const mergedUser = {
+                ...data,
+                id: parsedUser?.id || data.id,
+                googleId: parsedUser?.googleId || data.googleId,
+              };
+              setUser(mergedUser);
+              setFormData(mergedUser);
+              localStorage.setItem("user-info", JSON.stringify(mergedUser));
+            }
+          })
+          .catch(err => console.error("Error fetching user:", err));
+      } catch (error) {
+        console.error("Error parsing user info:", error);
+      }
     }
-  }
-}, [navigate]);
-
-
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("user-info");
@@ -66,7 +67,6 @@ useEffect(() => {
       ...prev,
       [e.target.name]: e.target.value
     }));
-    
   };
 
   const handleAvatarUpload = (e) => {
@@ -83,44 +83,44 @@ useEffect(() => {
     }
   };
 
-const handleSaveChanges = async () => {
-  if (!user?.email) {
-    alert("Email not loaded yet. Please try again.");
-    return;
-  }
+  const handleSaveChanges = async () => {
+    if (!user?.email) {
+      alert("Email not loaded yet. Please try again.");
+      return;
+    }
 
-  const updatedData = {
-    email: user.email, // required for backend update
-    name: formData.name,
-    bio: formData.bio,
-    education: formData.education,
-    portfolio: formData.portfolio
+    const updatedData = {
+      email: user.email,
+      name: formData.name,
+      bio: formData.bio,
+      education: formData.education,
+      portfolio: formData.portfolio
+    };
+
+    try {
+      const response = await fetch("https://career-guidance-platform.onrender.com/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      const savedUser = await response.json();
+      // ✅ merge so we don’t lose id/googleId
+      const mergedUser = {
+        ...savedUser,
+        id: user.id,
+        googleId: user.googleId,
+      };
+      setUser(mergedUser);
+      localStorage.setItem("user-info", JSON.stringify(mergedUser));
+      setEditModal(false);
+    } catch (error) {
+      console.error("Error saving user:", error);
+      alert("Failed to save changes. Please try again.");
+    }
   };
-
-  try {
-    const response = await fetch("https://career-guidance-platform.onrender.com/api/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedData),
-    });
-
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-    const savedUser = await response.json();
-
-    // ✅ Merge with existing user to keep `id`, `email`, etc.
-    const existingUser = JSON.parse(localStorage.getItem("user-info")) || {};
-    const mergedUser = { ...existingUser, ...savedUser };
-
-    setUser(mergedUser);
-    localStorage.setItem("user-info", JSON.stringify(mergedUser));
-    setEditModal(false);
-  } catch (error) {
-    console.error("Error saving user:", error);
-    alert("Failed to save changes. Please try again.");
-  }
-};
-
 
   if (!user) {
     return (
@@ -143,7 +143,7 @@ const handleSaveChanges = async () => {
           <div className="flex flex-col items-center space-y-3">
             <div className="relative group">
               <img
-                src={user.avatar || defaultAvatar}
+                src={user.avatar || user.image || defaultAvatar}
                 alt="User Avatar"
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg transition duration-300 hover:scale-105"
               />
@@ -207,7 +207,7 @@ const handleSaveChanges = async () => {
         </div>
       </div>
 
-      {/* 🔐 Logout Confirmation Modal */}
+      {/* 🔐 Logout Modal */}
       {showLogoutModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
           <div className="bg-white p-6 rounded-lg shadow-2xl w-80 text-center space-y-4 animate-fade-in">
