@@ -107,16 +107,19 @@ const handleSaveChanges = async () => {
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const savedUser = await response.json();
-    setUser(savedUser);
-    localStorage.setItem("user-info", JSON.stringify(savedUser));
+
+    // ✅ Merge with existing user to keep `id`, `email`, etc.
+    const existingUser = JSON.parse(localStorage.getItem("user-info")) || {};
+    const mergedUser = { ...existingUser, ...savedUser };
+
+    setUser(mergedUser);
+    localStorage.setItem("user-info", JSON.stringify(mergedUser));
     setEditModal(false);
   } catch (error) {
     console.error("Error saving user:", error);
     alert("Failed to save changes. Please try again.");
   }
 };
-
-
 
 
   if (!user) {
