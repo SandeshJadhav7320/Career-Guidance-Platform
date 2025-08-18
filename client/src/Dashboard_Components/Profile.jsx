@@ -39,7 +39,6 @@ const Profile = () => {
           .then(text => (text ? JSON.parse(text) : null))
           .then(data => {
             if (data) {
-              // ✅ merge, keep original id & googleId
               const mergedUser = {
                 ...data,
                 id: parsedUser?.id || data.id,
@@ -94,7 +93,8 @@ const Profile = () => {
       name: formData.name,
       bio: formData.bio,
       education: formData.education,
-      portfolio: formData.portfolio
+      portfolio: formData.portfolio,
+      avatar: formData.avatar || user?.avatar || null, // ✅ safe fallback
     };
 
     try {
@@ -107,7 +107,7 @@ const Profile = () => {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const savedUser = await response.json();
-      // ✅ merge so we don’t lose id/googleId
+
       const mergedUser = {
         ...savedUser,
         id: user.id,
@@ -122,11 +122,15 @@ const Profile = () => {
     }
   };
 
+  // ✅ Prevent crashes before user is loaded
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500 text-lg">
-        Loading profile...
-      </div>
+      <>
+        <Dashboard_Navbar />
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="text-gray-600">Loading profile...</p>
+        </div>
+      </>
     );
   }
 
@@ -143,7 +147,7 @@ const Profile = () => {
           <div className="flex flex-col items-center space-y-3">
             <div className="relative group">
               <img
-                src={user.avatar || user.image || defaultAvatar}
+                src={user?.avatar || user?.image || defaultAvatar}
                 alt="User Avatar"
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg transition duration-300 hover:scale-105"
               />
@@ -162,15 +166,15 @@ const Profile = () => {
                 <User size={18} className="text-gray-600" />
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
-            <p className="text-gray-500 italic">{user.bio || "Tell us about yourself."}</p>
+            <h2 className="text-2xl font-bold text-gray-800">{user?.name}</h2>
+            <p className="text-gray-500 italic">{user?.bio || "Tell us about yourself."}</p>
             <p>
               <span className="font-semibold text-gray-700">Education:</span>{" "}
-              {user.education || "Not added yet"}
+              {user?.education || "Not added yet"}
             </p>
             <p>
               <span className="font-semibold text-gray-700">Portfolio:</span>{" "}
-              {user.portfolio ? (
+              {user?.portfolio ? (
                 <a
                   href={user.portfolio}
                   target="_blank"
@@ -185,7 +189,7 @@ const Profile = () => {
 
           <div className="text-gray-600 flex items-center justify-center gap-2 text-sm">
             <Mail size={18} />
-            <span>{user.email}</span>
+            <span>{user?.email}</span>
           </div>
 
           <div className="flex justify-center gap-4 mt-6">
